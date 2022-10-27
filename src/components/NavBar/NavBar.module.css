@@ -1,0 +1,64 @@
+.nav-section-container {
+  height: 10vh;
+}
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.brand-logo {
+  height: 2rem;
+  width: 2rem;
+}
+.brand-text {
+  margin-bottom: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.brand-text:hover {
+  color: #6a4029;
+}
+.nav-link-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.navbar-link {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0;
+}
+.navbar-link li {
+  list-style-type: none;
+  cursor: pointer;
+  transition: color 0.2s font-weight 0.2s;
+}
+.navbar-link li:hover {
+  color: #6a4029;
+  font-weight: bold;
+}
+.btn {
+  padding: 0.5rem 1rem;
+  transition: transform 0.2s font-weight 0.2s;
+  border: none;
+}
+.btn:hover {
+  transform: scale(1.1);
+}
+.login {
+  background: none;
+}
+
+.sign-up {
+  width: 8rem;
+  border-radius: 3rem;
+  background: rgba(255, 186, 51, 1);
+  color: rgba(106, 64, 41, 1);
+}
+@media screen and (max-width: 768px) {
+  .nav-link-container {
+    display: none;
+  }
+}
