@@ -1,5 +1,6 @@
 .nav-section-container {
   height: 10vh;
+  width: 100%;
 }
 .brand-container {
   display: flex;
@@ -38,6 +39,11 @@
 .navbar-link li:hover {
   color: #6a4029;
   font-weight: bold;
+}
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: end;
 }
 .btn {
   padding: 0.5rem 1rem;

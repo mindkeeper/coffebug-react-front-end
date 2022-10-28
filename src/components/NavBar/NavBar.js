@@ -8,7 +8,7 @@ const NavBar = () => {
     <header>
       <nav className="container">
         <div
-          className={`row align-items-center ${styles["nav-section-container"]}`}
+          className={`row align-items-center justify-content-between ${styles["nav-section-container"]}`}
         >
           <section className={`col-md-3 col-6 ${styles["brand-container"]}`}>
             <img
@@ -26,9 +26,7 @@ const NavBar = () => {
               <li>History</li>
             </ul>
           </section>
-          <section
-            className={`${styles["button-container"]} col-6 col-md-3 d-flex align-items-end`}
-          >
+          <section className={`${styles["button-container"]} col-6 col-md-3`}>
             <button className={`${styles["btn"]} ${styles["login"]}`}>
               Login
             </button>
