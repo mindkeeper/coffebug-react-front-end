@@ -11,11 +11,11 @@ import google from "../../assets/img/google-logo.png";
 const Login = () => {
   return (
     <Fragment>
-      <main>
+      <main className={styles["main-login"]}>
         <aside className={styles["image-side"]}></aside>
         <aside className={styles["form-side"]}>
-          <nav>
-            <div className={styles.container}>
+          <nav className={styles["nav-container"]}>
+            <div className={styles["container"]}>
               <div className={styles["brand-container"]}>
                 <img src={brandLogo} alt="" />
                 <a href="../index.html" className={styles["brand-text"]}>
@@ -29,7 +29,7 @@ const Login = () => {
           </nav>
           <section className={styles["form-container"]}>
             <div className={styles["container"]}>
-              <form action="">
+              <form className={styles["form-login"]} action="">
                 <label for="email">Email address:</label>
                 <input type="text" placeholder="Enter your email address" />
                 <label for="email">Password:</label>
