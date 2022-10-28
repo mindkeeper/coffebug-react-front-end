@@ -1,0 +1,29 @@
+.promo-card {
+  padding: 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.promo-card:hover {
+  transform: scale(1.2);
+}
+.promo-name {
+  font-weight: 700;
+  margin-bottom: 0;
+}
+.promo-desc {
+  margin-bottom: 0;
+}
+.green {
+  background: #88b788;
+}
+.soft-brown {
+  background: #f5c361;
+}
+.dark-pink {
+  background-color: #c59378;
+}
+.promo-img img {
+  width: 100%;
+  height: 100%;
+}
