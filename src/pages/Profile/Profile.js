@@ -1,11 +1,26 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import NavBar from "../../components/NavBar/NavBar";
 import styles from "./Profile.module.css";
 import iconEdit from "../../assets/img/profile/edit-icon.png";
 import avatar from "../../assets/img/profile/profile-dummy.png";
+import { getProfile } from "../../utils/fetcher";
 
 const Profile = () => {
+  const token = JSON.parse(localStorage.getItem("userInfo")).token;
+  const [profile, setProfile] = useState({});
+  const requestProfile = async (token) => {
+    try {
+      const res = await getProfile(token);
+      setProfile(res.data.data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useState(() => {
+    requestProfile(token);
+    console.log(profile);
+  }, []);
   return (
     <Fragment>
       <NavBar />
@@ -15,9 +30,19 @@ const Profile = () => {
           <section className={styles["user-info-container"]}>
             <aside className={`${styles["edit"]} ${styles["avatar"]}`}>
               <div className={styles["avatar-container"]}>
-                <img className={styles["avatar-img"]} src={avatar} alt="" />
-                <p className={styles["display-name"]}>Zulaikha</p>
-                <p className={styles["email-text"]}>zulaikha17@gmail.com</p>
+                <img
+                  className={styles["avatar-img"]}
+                  src={
+                    !profile.image
+                      ? avatar
+                      : `http://localhost:8080/${profile.image}`
+                  }
+                  alt=""
+                />
+                <p className={styles["display-name"]}>
+                  {profile.display_name || "your name here"}
+                </p>
+                <p className={styles["email-text"]}>{profile.email}</p>
               </div>
               <div className={styles["btn-container"]}>
                 <button
@@ -69,17 +94,17 @@ const Profile = () => {
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
                       <label for="email">Email address:</label>
-                      <input type="text" />
+                      <input type="text" value={profile.email} />
                     </div>
                     <div className={styles["form-item"]}>
                       <label for="email">Delivery address:</label>
-                      <input type="text" />
+                      <input type="text" value={profile.address} />
                     </div>
                   </div>
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
                       <label for="phone-number">Phone number:</label>
-                      <input type="tel" />
+                      <input type="tel" value={profile.phone} />
                     </div>
                   </div>
                 </form>
@@ -92,21 +117,30 @@ const Profile = () => {
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
                       <label for="name">Display name:</label>
-                      <input type="text" />
+                      <input
+                        type="text"
+                        value={profile.display_name || "your name here"}
+                      />
                     </div>
                     <div className={styles["form-item"]}>
                       <label for="first-name">First name:</label>
-                      <input type="text" />
+                      <input
+                        type="text"
+                        value={profile.first_name || "your name here"}
+                      />
                     </div>
                     <div className={styles["form-item"]}>
                       <label for="last-name">Last name:</label>
-                      <input type="text" />
+                      <input
+                        type="text"
+                        value={profile.first_name || "your name here"}
+                      />
                     </div>
                   </div>
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
                       <label for="birthday">Birthday:</label>
-                      <input type="date" />
+                      <input type="date" value={profile.birthday} />
                     </div>
                   </div>
                 </form>
