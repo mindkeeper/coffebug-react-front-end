@@ -172,6 +172,9 @@
   object-fit: contain;
   height: 29rem;
 }
+.locations-subtitle {
+  text-align: centers;
+}
 
 .locations {
   padding: 3.25rem 0;

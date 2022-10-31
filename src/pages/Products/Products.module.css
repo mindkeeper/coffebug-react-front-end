@@ -76,17 +76,19 @@ li.button {
   justify-content: space-between;
   margin-bottom: 4rem;
 }
-.categories-container a {
+.categories-container li {
   text-decoration: none;
   font-weight: 700;
   color: #9f9f9f;
   padding: 1rem;
+  list-style-type: none;
+  cursor: pointer;
 }
-.categories-container a:hover {
+.categories-container li:hover {
   color: #6a4029;
   border-bottom: 2px solid #6a4029;
 }
-.categories-container a::after {
+.categories-container li::after {
   color: #6a4029;
   border-bottom: 2px solid #6a4029;
 }

@@ -49,11 +49,12 @@
   width: 2rem;
   height: 2rem;
 }
-.brand-container a {
+.brand-container p {
   font-size: 1.5rem;
   color: #0b132a;
   text-decoration: none;
   font-weight: 700;
+  cursor: pointer;
 }
 .nav-login {
   color: #6a4029;
@@ -92,6 +93,7 @@
   color: #6a4029;
   font-weight: 700;
   text-decoration: underline;
+  cursor: pointer;
 }
 .btn {
   padding: 1rem 0;
