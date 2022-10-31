@@ -1,10 +1,52 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState, useMemo } from "react";
 import ProductCard from "../../components/Cards/ProductCard";
 import PromoCard from "../../components/Cards/PromoCard";
 import NavBar from "../../components/NavBar/NavBar";
 import Footer from "../../components/Footer/Footer";
 import styles from "./Products.module.css";
-const Products = () => {
+import { getData } from "../../utils/fetcher";
+import withSearchParams from "../../helpers/withSearchParams";
+import { createSearchParams, useLocation } from "react-router-dom";
+
+const useQuery = () => {
+  const { search } = useLocation();
+
+  return useMemo(() => new URLSearchParams(search), [search]);
+};
+
+const Products = ({ setSerchParams }) => {
+  const getQuery = useQuery();
+  const [product, setProduct] = useState([]);
+  const [query, setQuery] = useState({
+    search: getQuery.get("search") ? getQuery.get("search") : "",
+    categories: getQuery.get("categories") ? getQuery.get("categories") : "",
+    minPrice: getQuery.get("minPrice") ? getQuery.get("minPrice") : 0,
+    maxPrice: getQuery.get("maxPrice") ? getQuery.get("maxPrice") : 1000000,
+    sort: getQuery.get("sort") ? getQuery.get("sort") : "popular",
+  });
+
+  const fetchData = async (query) => {
+    try {
+      const products = await getData(`/products`, query);
+      setProduct(products.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(query);
+  }, [query]);
+
+  const currency = (price) => {
+    return (
+      "IDR " +
+      parseFloat(price)
+        .toFixed()
+        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+    );
+  };
+
   return (
     <Fragment>
       <NavBar />
@@ -54,19 +96,96 @@ const Products = () => {
           </section>
           <section className={`col-12 col-md-8 ${styles["products-section"]}`}>
             <div className={`container ${styles["products-container"]}`}>
-              <div className={styles["categories-container"]}>
-                <a href="">Favorite & Promo</a>
-                <a href="">Coffe</a>
-                <a href="">Non Coffe</a>
-                <a href="">Foods</a>
-                <a href="">Add-on</a>
-              </div>
+              <ul className={styles["categories-container"]}>
+                <li
+                  onClick={() => {
+                    setQuery({
+                      ...query,
+                      sort: "popular",
+                      categories: "",
+                      search: "",
+                      minPrice: 0,
+                      maxPrice: 1000000,
+                    });
+                  }}
+                >
+                  Favorite & Promo
+                </li>
+                <li
+                  onClick={() => {
+                    setQuery({
+                      ...query,
+                      sort: "",
+                      categories: "coffee",
+                      search: "",
+                      minPrice: 0,
+                      maxPrice: 1000000,
+                    });
+                    const urlSearchParams = createSearchParams({ ...query });
+                    setSerchParams(urlSearchParams);
+                  }}
+                >
+                  Coffe
+                </li>
+                <li
+                  onClick={() => {
+                    setQuery({
+                      ...query,
+                      sort: "",
+                      categories: "non-coffee",
+                      search: "",
+                      minPrice: 0,
+                      maxPrice: 1000000,
+                    });
+                    const urlSearchParams = createSearchParams({ ...query });
+                    setSerchParams(urlSearchParams);
+                  }}
+                >
+                  Non Coffe
+                </li>
+                <li
+                  onClick={() => {
+                    setQuery({
+                      ...query,
+                      sort: "",
+                      categories: "foods",
+                      search: "",
+                      minPrice: 0,
+                      maxPrice: 1000000,
+                    });
+                    const urlSearchParams = createSearchParams({ ...query });
+                    setSerchParams(urlSearchParams);
+                  }}
+                >
+                  Foods
+                </li>
+                <li
+                  onClick={() => {
+                    setQuery({
+                      ...query,
+                      sort: "",
+                      categories: "add-on",
+                      search: "",
+                      minPrice: 0,
+                      maxPrice: 1000000,
+                    });
+                    const urlSearchParams = createSearchParams({ ...query });
+                    setSerchParams(urlSearchParams);
+                  }}
+                >
+                  Add-on
+                </li>
+              </ul>
               <div className={styles["product-list-container"]}>
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
+                {product.map((e) => (
+                  <ProductCard
+                    productName={e.product_name}
+                    price={currency(e.price)}
+                    image={e.image}
+                    id={e.id}
+                    key={e.id}
+                  />
+                ))}
               </div>
             </div>
           </section>
@@ -77,4 +196,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default withSearchParams(Products);
