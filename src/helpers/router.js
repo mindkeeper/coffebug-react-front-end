@@ -1,5 +1,5 @@
 import React from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter as Router } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Products from "../pages/Products/Products";
@@ -7,7 +7,10 @@ import Profile from "../pages/Profile/Profile";
 import SignUp from "../pages/SignUp/SignUp";
 import DetailsProduct from "../pages/DetailsProduct/Detailsproduct";
 import History from "../pages/History/History";
-const router = createBrowserRouter([
+import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
+import Payment from "../pages/Payment/Payment";
+
+const router = Router([
   {
     path: "/",
     element: <Home />,
@@ -29,12 +32,20 @@ const router = createBrowserRouter([
     element: <Profile />,
   },
   {
-    path: "/details",
+    path: "/products/:id",
     element: <DetailsProduct />,
   },
   {
     path: "/history",
     element: <History />,
+  },
+  {
+    path: "/reset-password",
+    element: <ForgotPassword />,
+  },
+  {
+    path: "/payment",
+    element: <Payment />,
   },
 ]);
 
