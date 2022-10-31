@@ -1,9 +1,45 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import NavBar from "../../components/NavBar/NavBar";
 import styles from "./DetailsProduct.module.css";
-import brew from "../../assets/img/details/brew.png";
+import { useParams } from "react-router-dom";
+import { getData } from "../../utils/fetcher";
 const DetailsProduct = () => {
+  const [product, setProduct] = useState({
+    category_name: "",
+    product_name: "",
+    id: "",
+    image: "",
+    price: 0,
+    sold: "",
+    description: "",
+  });
+  const [size, setSize] = useState("Regular");
+  const { id } = useParams();
+
+  const fetchData = async () => {
+    try {
+      const res = await getData(`/products/${id}`);
+      setProduct({ product, ...res.data.data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const currency = (price) => {
+    return (
+      "IDR " +
+      parseFloat(price)
+        .toFixed()
+        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+    );
+  };
+
+  const changeSize = (size) => {
+    setSize(size);
+  };
   return (
     <Fragment>
       <NavBar />
@@ -11,13 +47,19 @@ const DetailsProduct = () => {
         <div className="container">
           <section className={`col-12 ${styles["categories"]}`}>
             <p className={styles["category-name"]}>
-              Favorites and Promos{" "}
-              <span className={styles["span-brown"]}>&gt; Cold Brew</span>
+              {product.category_name}{" "}
+              <span className={styles["span-brown"]}>
+                &gt; {product.product_name}
+              </span>
             </p>
           </section>
           <section className={`col-12 ${styles["details-container"]}`}>
             <aside className={styles["side-container"]}>
-              <img src={brew} alt="" className={styles["product-image"]} />
+              <img
+                src={`http://localhost:8080/${product.image}`}
+                alt=""
+                className={styles["product-image"]}
+              />
 
               <section className={styles["delivery-container"]}>
                 <p className={styles["delivery-title"]}>Delivery and Time</p>
@@ -45,15 +87,10 @@ const DetailsProduct = () => {
             </aside>
             <aside className={styles["side-container"]}>
               <h1 className={`text-center ${styles["product-main-title"]}`}>
-                Cold Brew
+                {product.product_name}
               </h1>
               <div className={styles["desc-container"]}>
-                <p className={styles["description"]}>
-                  Cold brewing is a method of brewing that combines ground
-                  coffee and cool water and uses time instead of heat to extract
-                  the flavor. It is brewed in small batches and steeped for as
-                  long as 48 hours.
-                </p>
+                <p className={styles["description"]}>{product.description}</p>
                 <p className={`${styles["delivery-desc"]}`}>
                   Delivery only on{" "}
                   <span className={styles["span-brown"]}>
@@ -71,7 +108,7 @@ const DetailsProduct = () => {
                   />
                   <span className={styles["plus"]}>&#62;</span>
                 </div>
-                <p className={styles["price"]}>IDR 30.000</p>
+                <p className={styles["price"]}>{currency(product.price)}</p>
               </div>
               <div className={styles["buttons"]}>
                 <button className={`${styles["btn"]} ${styles["add-to-cart"]}`}>
@@ -91,22 +128,45 @@ const DetailsProduct = () => {
                 Choose a size
               </p>
               <div className={`${styles["sizes"]}`}>
-                <p className={`${styles["size"]}`}>R</p>
-                <p className={`${styles["size"]}`}>R</p>
-                <p className={`${styles["size"]}`}>R</p>
+                <p
+                  onClick={() => {
+                    changeSize("Regular");
+                  }}
+                  className={`${styles["size"]}`}
+                >
+                  R
+                </p>
+                <p
+                  onClick={() => {
+                    changeSize("Large");
+                  }}
+                  className={`${styles["size"]}`}
+                >
+                  L
+                </p>
+                <p
+                  onClick={() => {
+                    changeSize("Extra Large");
+                  }}
+                  className={`${styles["size"]}`}
+                >
+                  XL
+                </p>
               </div>
             </div>
             <div
               className={`col-8 col-md-8 row aling-items-center ${styles["check-out"]}`}
             >
               <img
-                src={brew}
+                src={`http://localhost:8080/${product.image}`}
                 alt=""
                 className={`${styles["selected-item"]} col-3`}
               />
               <div className={`${styles["selected-item-detail"]} col-4`}>
-                <p className={`${styles["item-name"]} `}>Cold Brew</p>
-                <p className={`${styles["qty"]} `}>(1x) Regular</p>
+                <p className={`${styles["item-name"]} `}>
+                  {product.product_name}
+                </p>
+                <p className={`${styles["qty"]} `}>(1x) {size}</p>
               </div>
               <div className={`${styles["final-container"]} col-5`}>
                 <p className={`${styles["checkout-title"]}`}>Checkout</p>
