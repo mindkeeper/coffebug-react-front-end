@@ -1,14 +1,43 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import Footer from "../../components/Footer/Footer";
 // image Import
 import brandLogo from "../../assets/img/footer/brand-logo.png";
-import twitter from "../../assets/img/footer/twitter.png";
-import facebook from "../../assets/img/footer/facebook.png";
-import instagram from "../../assets/img/footer/instagram.png";
 import google from "../../assets/img/google-logo.png";
+import withNavigate from "../../helpers/withNavigate";
+import { login } from "../../utils/fetcher";
 // image import end
-const Login = () => {
+
+const Login = ({ navigate }) => {
+  const [userInfo, setUserInfo] = useState({});
+  const [body, setBody] = useState({ email: "", password: "" });
+  const [clickLogin, setClickLogin] = useState(false);
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    setUserInfo(userInfo);
+    if (!userInfo) return;
+    navigate("/");
+  }, [clickLogin]);
+
+  const submitHandler = async (e) => {
+    // setbody({...body, email:e.target.email.value, password:e.target.password.value})
+    e.preventDefault();
+    if (!body.email || !body.password) console.log("Empty");
+    try {
+      const loginRequest = await login(body);
+      localStorage.setItem("userInfo", JSON.stringify(loginRequest.data.data));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setClickLogin(!clickLogin);
+    }
+  };
+
+  const changeHandler = (e) => {
+    setBody({ ...body, [e.target.name]: e.target.value });
+    console.log(body);
+  };
+
   return (
     <Fragment>
       <main className={styles["main-login"]}>
@@ -18,26 +47,39 @@ const Login = () => {
             <div className={styles["container"]}>
               <div className={styles["brand-container"]}>
                 <img src={brandLogo} alt="" />
-                <a href="../index.html" className={styles["brand-text"]}>
-                  Coffebug
-                </a>
+                <p className={styles["brand-text"]}>Coffebug</p>
               </div>
-              <a href="" className={styles["nav-login"]}>
-                Login
-              </a>
+              <p className={styles["nav-login"]}>Login</p>
             </div>
           </nav>
           <section className={styles["form-container"]}>
             <div className={styles["container"]}>
-              <form className={styles["form-login"]} action="">
-                <label for="email">Email address:</label>
-                <input type="text" placeholder="Enter your email address" />
-                <label for="email">Password:</label>
-                <input type="password" placeholder="Enter your password" />
-                <p className={styles["forgot-password"]}>Forgot Password?</p>
+              <form onSubmit={submitHandler} className={styles["form-login"]}>
+                <label htmlFor="email">Email address:</label>
+                <input
+                  onChange={changeHandler}
+                  name="email"
+                  type="text"
+                  placeholder="Enter your email address"
+                />
+                <label htmlFor="email">Password:</label>
+                <input
+                  onChange={changeHandler}
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                />
+                <p
+                  onClick={() => {
+                    navigate("/reset-password");
+                  }}
+                  className={styles["forgot-password"]}
+                >
+                  Forgot Password?
+                </p>
                 <button
+                  type="submit"
                   className={`${styles["btn"]} ${styles["login"]}`}
-                  onclick="window.location.href = '../profile';"
                 >
                   Login
                 </button>
@@ -52,7 +94,12 @@ const Login = () => {
                   <p>Dont have an account?</p>
                   <div className={styles["line"]}></div>
                 </div>
-                <button className={`${styles["btn"]} ${styles["sign-up"]}`}>
+                <button
+                  onClick={() => {
+                    navigate("/register");
+                  }}
+                  className={`${styles["btn"]} ${styles["sign-up"]}`}
+                >
                   Sign Up
                 </button>
               </form>
@@ -65,4 +112,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withNavigate(Login);
