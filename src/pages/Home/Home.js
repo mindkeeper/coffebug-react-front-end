@@ -11,7 +11,10 @@ import mapImg from "../../assets/img/home/locations.png";
 import netflix from "../../assets/img/home/netflix.png";
 import users from "../../assets/img/home/user-1.png";
 import star from "../../assets/img/home/star.png";
-const Home = () => {
+
+import withNavigate from "../../helpers/withNavigate";
+import withLocation from "../../helpers/withLocation";
+const Home = ({ navigate }) => {
   return (
     <Fragment>
       <NavBar />
@@ -33,7 +36,14 @@ const Home = () => {
                 made by love just for you. Start your day with us for a bigger
                 smile!
               </p>
-              <button className={styles["hero-button"]}>Get Started</button>
+              <button
+                onClick={() => {
+                  navigate("/register");
+                }}
+                className={styles["hero-button"]}
+              >
+                Get Started
+              </button>
               <div className={`${styles["info-cta"]} col-12`}>
                 <div className={`row align-items-center`}>
                   <div
@@ -357,7 +367,12 @@ const Home = () => {
                     </p>
                   </div>
                   <div className="col-4 d-flex justify-content-end">
-                    <button className={styles["btn-see-promo"]}>
+                    <button
+                      onClick={() => {
+                        navigate("/products");
+                      }}
+                      className={styles["btn-see-promo"]}
+                    >
                       See promo
                     </button>
                   </div>
@@ -372,4 +387,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default withLocation(withNavigate(Home));
