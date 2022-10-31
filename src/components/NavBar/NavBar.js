@@ -2,8 +2,16 @@ import React from "react";
 
 import brandLogo from "../../assets/img/nav/brand-logo.png";
 import styles from "./NavBar.module.css";
+import withNavigate from "../../helpers/withNavigate";
+import withLocation from "../../helpers/withLocation";
+import withSearchParams from "../../helpers/withSearchParams";
+import NavLogin from "./NavLogin";
+import NavGuest from "./NavGuest";
 
-const NavBar = () => {
+const NavBar = ({ navigate }) => {
+  const token = JSON.parse(localStorage.getItem("userInfo"))
+    ? JSON.parse(localStorage.getItem("userInfo")).token
+    : "";
   return (
     <header>
       <nav className="container">
@@ -16,29 +24,46 @@ const NavBar = () => {
               alt="brand-logo"
               className={styles["brand-logo"]}
             />
-            <p className={styles["brand-text"]}>Coffebug</p>
+            <p
+              className={styles["brand-text"]}
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Coffebug
+            </p>
           </section>
           <section className={`col-6 ${styles["nav-link-container"]}`}>
             <ul className={styles["navbar-link"]}>
-              <li>Home</li>
-              <li>Products</li>
+              <li
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                Home
+              </li>
+              <li
+                onClick={() => {
+                  navigate("/products");
+                }}
+              >
+                Products
+              </li>
               <li>Your Cart</li>
-              <li>History</li>
+              <li
+                onClick={() => {
+                  navigate("/history");
+                }}
+              >
+                History
+              </li>
             </ul>
           </section>
-          <section className={`${styles["button-container"]} col-6 col-md-3`}>
-            <button className={`${styles["btn"]} ${styles["login"]}`}>
-              Login
-            </button>
-
-            <button className={`${styles["btn"]} ${styles["sign-up"]}`}>
-              Sign Up
-            </button>
-          </section>
+          {token ? <NavLogin /> : <NavGuest />}
         </div>
       </nav>
     </header>
   );
 };
 
-export default NavBar;
+export default withSearchParams(withLocation(withNavigate(NavBar)));
