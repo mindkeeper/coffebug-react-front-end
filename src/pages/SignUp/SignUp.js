@@ -3,7 +3,8 @@ import styles from "./SignUp.module.css";
 import brandLogo from "../../assets/img/nav/brand-logo.png";
 import google from "../../assets/img/google-logo.png";
 import Footer from "../../components/Footer/Footer";
-const SignUp = () => {
+import withNavigate from "../../helpers/withNavigate";
+const SignUp = ({ navigate }) => {
   return (
     <main className={styles["main-register"]}>
       <aside className={styles["image-side"]}></aside>
@@ -16,14 +17,12 @@ const SignUp = () => {
                 Coffebug
               </a>
             </div>
-            <a href="" className={styles["nav-sign-up"]}>
-              Sign Up
-            </a>
+            <p className={styles["nav-sign-up"]}>Sign Up</p>
           </div>
         </nav>
         <section className={styles["form-container"]}>
           <div className={styles["container"]}>
-            <form className={styles["form-sign-up"]} action="">
+            <form className={styles["form-sign-up"]}>
               <label for="email">Email address:</label>
               <input type="text" placeholder="Enter your email address" />
               <label for="password">Password:</label>
@@ -35,7 +34,7 @@ const SignUp = () => {
                 className={`${styles["btn"]} ${styles["sign-up"]}`}
                 onclick="window.location.href = '../profile';"
               >
-                Login
+                Sign Up
               </button>
               <button
                 className={`${styles["btn"]} ${styles["google-sign-up"]}`}
@@ -48,8 +47,13 @@ const SignUp = () => {
                 <p>Already have an account?</p>
                 <div className={styles["line"]}></div>
               </div>
-              <button className={`${styles["btn"]} ${styles["login"]}`}>
-                Sign Up
+              <button
+                onClick={() => {
+                  navigate("/login");
+                }}
+                className={`${styles["btn"]} ${styles["login"]}`}
+              >
+                Login
               </button>
             </form>
           </div>
@@ -59,4 +63,4 @@ const SignUp = () => {
     </main>
   );
 };
-export default SignUp;
+export default withNavigate(SignUp);
