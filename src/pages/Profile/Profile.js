@@ -5,8 +5,9 @@ import styles from "./Profile.module.css";
 import iconEdit from "../../assets/img/profile/edit-icon.png";
 import avatar from "../../assets/img/profile/profile-dummy.png";
 import { getProfile } from "../../utils/fetcher";
+import withNavigate from "../../helpers/withNavigate";
 
-const Profile = () => {
+const Profile = ({ navigate }) => {
   const token = JSON.parse(localStorage.getItem("userInfo")).token;
   const [profile, setProfile] = useState({});
   const requestProfile = async (token) => {
@@ -76,7 +77,13 @@ const Profile = () => {
                   Cancel
                 </button>
               </div>
-              <div className={styles["btn-container"]}>
+              <div
+                onClick={() => {
+                  localStorage.removeItem("userInfo");
+                  navigate("/login");
+                }}
+                className={styles["btn-container"]}
+              >
                 <button className={`${styles["btn"]} ${styles["logout"]}`}>
                   Log out
                 </button>
@@ -164,4 +171,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default withNavigate(Profile);

@@ -195,6 +195,7 @@ input[type="time"]:focus:before {
   padding: 1.5rem 0;
   border: none;
   font-weight: bold;
+  border-radius: 1rem;
 }
 .add-to-cart {
   background: #6a4029;

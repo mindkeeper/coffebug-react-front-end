@@ -46,7 +46,13 @@ const Login = ({ navigate }) => {
           <nav className={styles["nav-container"]}>
             <div className={styles["container"]}>
               <div className={styles["brand-container"]}>
-                <img src={brandLogo} alt="" />
+                <img
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                  src={brandLogo}
+                  alt=""
+                />
                 <p className={styles["brand-text"]}>Coffebug</p>
               </div>
               <p className={styles["nav-login"]}>Login</p>

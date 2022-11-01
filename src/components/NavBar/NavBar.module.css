@@ -61,6 +61,7 @@
 .profile {
   width: 2rem;
   height: 2rem;
+  cursor: pointer;
 }
 .profile {
   border-radius: 50%;

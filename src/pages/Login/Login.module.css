@@ -48,6 +48,7 @@
 .brand-container img {
   width: 2rem;
   height: 2rem;
+  cursor: pointer;
 }
 .brand-container p {
   font-size: 1.5rem;

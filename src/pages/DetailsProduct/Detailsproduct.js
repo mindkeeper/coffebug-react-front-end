@@ -14,6 +14,7 @@ const DetailsProduct = () => {
     sold: "",
     description: "",
   });
+  const [count, setCount] = useState(0);
   const [size, setSize] = useState("Regular");
   const { id } = useParams();
 
@@ -39,6 +40,13 @@ const DetailsProduct = () => {
 
   const changeSize = (size) => {
     setSize(size);
+  };
+  const increment = () => {
+    setCount((prevState) => prevState + 1);
+  };
+
+  const decrement = () => {
+    setCount((prevState) => prevState - 1);
   };
   return (
     <Fragment>
@@ -100,13 +108,27 @@ const DetailsProduct = () => {
               </div>
               <div className={`${styles["qty-price"]} col-12`}>
                 <div className={styles["qty-value"]}>
-                  <span className={styles["minus"]}>&#60;</span>
+                  <span
+                    onClick={() => {
+                      decrement();
+                    }}
+                    className={styles["minus"]}
+                  >
+                    &#60;
+                  </span>
                   <input
                     type="text"
-                    value="1"
+                    value={count}
                     className={styles["input-qty"]}
                   />
-                  <span className={styles["plus"]}>&#62;</span>
+                  <span
+                    onClick={() => {
+                      increment();
+                    }}
+                    className={styles["plus"]}
+                  >
+                    &#62;
+                  </span>
                 </div>
                 <p className={styles["price"]}>{currency(product.price)}</p>
               </div>
@@ -166,7 +188,9 @@ const DetailsProduct = () => {
                 <p className={`${styles["item-name"]} `}>
                   {product.product_name}
                 </p>
-                <p className={`${styles["qty"]} `}>(1x) {size}</p>
+                <p className={`${styles["qty"]} `}>
+                  ({count}) {size}
+                </p>
               </div>
               <div className={`${styles["final-container"]} col-5`}>
                 <p className={`${styles["checkout-title"]}`}>Checkout</p>

@@ -26,14 +26,7 @@ const LoginNav = ({ navigate }) => {
           onChange={setValue}
         />
       </form>
-      <img
-        onClick={() => {
-          localStorage.removeItem("userInfo");
-          navigate("/login");
-        }}
-        src={chatLogo}
-        className={styles["chat"]}
-      ></img>
+      <img src={chatLogo} className={styles["chat"]}></img>
       <img
         onClick={() => {
           navigate("/profile/");
