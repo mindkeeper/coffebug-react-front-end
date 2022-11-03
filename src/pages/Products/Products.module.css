@@ -71,9 +71,11 @@ li.button {
 
 /* promo end */
 /* products start */
+
 .categories-container {
   display: flex;
   justify-content: space-between;
+  padding: 0;
   margin-bottom: 4rem;
 }
 .categories-container li {
@@ -93,17 +95,54 @@ li.button {
   border-bottom: 2px solid #6a4029;
 }
 .products-container {
+  width: 90%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 3rem;
 }
 .product-list-container {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
-  gap: 6rem;
-  margin-left: 3rem;
+  justify-content: flex-start;
+  gap: 8rem 2rem;
+  padding: 0 4.3rem;
+  margin-left: 5rem;
+  margin: 0 auto;
 }
-
+.paginate-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: 0 auto;
+}
+.btn-paginate {
+  display: flex;
+  gap: 3rem 1rem;
+  justify-content: flex-end;
+}
+.btn-next,
+.btn-prev {
+  padding: 0.75rem 1rem;
+  width: 7rem;
+  border: none;
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 20px rgba(176, 162, 162, 0.5);
+  animation: transform 0.5s;
+}
+.btn-next:hover,
+.btn-prev:hover {
+  transform: scale(1.05);
+  font-weight: bold;
+}
+.show {
+  display: inline;
+}
+.none {
+  display: none;
+}
 /* products end */
 /* main end */
 

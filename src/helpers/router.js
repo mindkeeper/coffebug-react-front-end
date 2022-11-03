@@ -1,14 +1,15 @@
 import React from "react";
 import { createBrowserRouter as Router } from "react-router-dom";
 import Home from "../pages/Home/Home";
-import Login from "../pages/Login/Login";
+import Login from "../pages/Login";
 import Products from "../pages/Products/Products";
 import Profile from "../pages/Profile/Profile";
-import SignUp from "../pages/SignUp/SignUp";
+import SignUp from "../pages/SignUp";
 import DetailsProduct from "../pages/DetailsProduct/Detailsproduct";
 import History from "../pages/History/History";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import Payment from "../pages/Payment/Payment";
+import TestPage from "../pages/Test Page/Test";
 
 const router = Router([
   {
@@ -46,6 +47,10 @@ const router = Router([
   {
     path: "/payment",
     element: <Payment />,
+  },
+  {
+    path: "/test",
+    element: <TestPage />,
   },
 ]);
 

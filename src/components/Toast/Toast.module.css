@@ -1,0 +1,40 @@
+.container {
+  width: 14rem;
+  height: 4rem;
+  position: absolute;
+  border-radius: 1rem;
+  margin: 0 auto;
+  top: 3rem;
+  left: 0;
+  right: 0;
+  animation: toast-top 0.7s;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.773);
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.none {
+  display: none;
+}
+.error {
+  background-color: rgba(157, 59, 59, 0.9);
+}
+.success {
+  background-color: rgba(66, 197, 94, 0.9);
+}
+.message {
+  font-size: 1.25rem;
+  color: white;
+  text-align: center;
+}
+@keyframes toast-top {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+} ;

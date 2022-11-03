@@ -23,7 +23,9 @@ const Home = ({ navigate }) => {
           <section
             className={`${styles["hero"]} col-12 d-flex align-items-center`}
           >
-            <div className="container">
+            <div
+              className={`${styles["full-height"]} ${styles["center"]} ${styles["relative"]} container`}
+            >
               <h1
                 className={`${styles["hero-title"]} text-white col-12 col-md-6`}
               >
@@ -248,7 +250,9 @@ const Home = ({ navigate }) => {
           </section>
 
           <section className={`${styles["reviews"]} col-12`}>
-            <div className="container">
+            <div
+              className={`${styles["full-height"]} ${styles["relative"]} container`}
+            >
               <div className={` row justify-content-center`}>
                 <div
                   className={`col-12 ${styles["reviews-titles"]} text-center`}

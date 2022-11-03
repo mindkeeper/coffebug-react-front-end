@@ -8,9 +8,20 @@
   background: url("../../assets//img/home/home-bg.png");
   background-size: cover;
   background-position: center center;
-  margin-bottom: 5%;
 }
 
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+.full-height {
+  height: 100%;
+}
+.relative {
+  position: relative;
+}
 .hero-subtitle,
 .hero-title {
   padding: 0;
@@ -37,11 +48,11 @@
   margin: 0;
 }
 .info-cta {
-  position: relative;
+  position: absolute;
+  bottom: -12%;
   background-color: white;
   padding: 5%;
   border-radius: 1rem;
-  bottom: -13rem;
   box-shadow: 0 1px 4px rgba(106, 64, 41, 0.5);
 }
 .img-cust-container {
@@ -121,7 +132,7 @@
   margin-top: 10%;
   display: flex;
   justify-content: center;
-  gap: 5rem;
+  gap: 3rem;
 }
 .card-menu {
   display: flex;
@@ -173,9 +184,8 @@
   height: 29rem;
 }
 .locations-subtitle {
-  text-align: centers;
+  text-align: center;
 }
-
 .locations {
   padding: 3.25rem 0;
 }
@@ -191,7 +201,7 @@
   object-fit: contain;
 }
 .reviews {
-  height: 80vh;
+  height: 60vh;
   margin-top: 10vh;
 }
 .reviews .container {
@@ -254,8 +264,8 @@
   object-fit: contain;
 }
 .promo-cta {
-  position: relative;
-  bottom: -11rem;
+  position: absolute;
+  bottom: -12%;
   height: auto;
   padding: 1.25rem;
   border-radius: 1rem;
@@ -297,26 +307,28 @@ footer {
   .hero-button {
     width: 50%;
   }
-  .hero,
-  .services,
   .favorites,
   .locations,
   .partners,
   .reviews {
     height: auto;
-    margin-bottom: 10%;
+  }
+  .card-review-container {
+    margin-bottom: 3%;
   }
   .card-menu {
     margin-top: 20%;
   }
   .info-cta {
-    bottom: -3rem;
+    bottom: -8%;
+    width: 95%;
   }
   .cta-title {
     width: 80%;
   }
   .promo-cta {
-    bottom: -14rem;
+    bottom: -16%;
+    width: 95%;
   }
   .reviews {
     height: auto;

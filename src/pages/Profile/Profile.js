@@ -94,24 +94,24 @@ const Profile = ({ navigate }) => {
                 <img src={iconEdit} alt="" />
               </div>
               <div
-                className={`${styles["details-container"]} ${styles["contact-form"]}`}
+                className={`${styles["details-container"]} ${styles["contact-htmlForm"]}`}
               >
                 <p className={styles["contacts-text"]}>Contacts</p>
                 <form className={styles["profile-form"]} action="">
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
-                      <label for="email">Email address:</label>
-                      <input type="text" value={profile.email} />
+                      <label htmlFor="email">Email address:</label>
+                      <input type="text" placeholder={profile.email} />
                     </div>
                     <div className={styles["form-item"]}>
-                      <label for="email">Delivery address:</label>
-                      <input type="text" value={profile.address} />
+                      <label htmlFor="email">Delivery address:</label>
+                      <input type="text" placeholder={profile.address} />
                     </div>
                   </div>
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
-                      <label for="phone-number">Phone number:</label>
-                      <input type="tel" value={profile.phone} />
+                      <label htmlFor="phone-number">Phone number:</label>
+                      <input type="tel" placeholder={profile.phone} />
                     </div>
                   </div>
                 </form>
@@ -123,42 +123,42 @@ const Profile = ({ navigate }) => {
                 <form action="">
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
-                      <label for="name">Display name:</label>
+                      <label htmlFor="name">Display name:</label>
                       <input
                         type="text"
-                        value={profile.display_name || "your name here"}
+                        placeholder={profile.display_name || "your name here"}
                       />
                     </div>
                     <div className={styles["form-item"]}>
-                      <label for="first-name">First name:</label>
+                      <label htmlFor="first-name">First name:</label>
                       <input
                         type="text"
-                        value={profile.first_name || "your name here"}
+                        placeholder={profile.first_name || "your name here"}
                       />
                     </div>
                     <div className={styles["form-item"]}>
-                      <label for="last-name">Last name:</label>
+                      <label htmlFor="last-name">Last name:</label>
                       <input
                         type="text"
-                        value={profile.first_name || "your name here"}
+                        placeholder={profile.first_name || "your name here"}
                       />
                     </div>
                   </div>
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
-                      <label for="birthday">Birthday:</label>
-                      <input type="date" value={profile.birthday} />
+                      <label htmlFor="birthday">Birthday:</label>
+                      <input type="date" placeholder={profile.birthday} />
                     </div>
                   </div>
                 </form>
               </div>
               <div className={styles["gender-selector"]}>
                 <div className={styles["radio-container"]}>
-                  <input type="radio" value="Male" name="choice" />
-                  <label for="male">Male</label>
+                  <input type="radio" placeholder="Male" name="choice" />
+                  <label htmlFor="male">Male</label>
                 </div>
                 <div className={styles["radio-container"]}>
-                  <input type="radio" value="Female" name="choice" />
+                  <input type="radio" placeholder="Female" name="choice" />
                   <label for="female">Female</label>
                 </div>
               </div>

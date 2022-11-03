@@ -19,7 +19,16 @@ const History = () => {
   useEffect(() => {
     requestHistory(token);
     console.log(history);
-  }, []);
+  });
+  const currency = (price) => {
+    return (
+      "IDR " +
+      parseFloat(price)
+        .toFixed()
+        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+    );
+  };
+
   return (
     <Fragment>
       <NavBar />
@@ -38,7 +47,7 @@ const History = () => {
             {history.map((e) => (
               <HistoryCard
                 productName={e.product_name}
-                price={e.price}
+                price={currency(e.price)}
                 status={e.status_name}
                 image={e.image}
               />

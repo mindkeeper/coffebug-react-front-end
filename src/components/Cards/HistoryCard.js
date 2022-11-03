@@ -10,8 +10,8 @@ const HistoryCard = ({ productName, price, status, image }) => {
         <p className={styles["product-name"]}>{productName}</p>
         <p className={styles["price"]}>{price}</p>
         <p className={styles["status"]}>{status}</p>
-        <input type="checkbox" className={styles["checkbox"]} />
       </div>
+      <input type="checkbox" className={styles["checkbox"]} />
     </div>
   );
 };

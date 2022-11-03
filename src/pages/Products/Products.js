@@ -17,26 +17,36 @@ const useQuery = () => {
 const Products = ({ setSerchParams }) => {
   const getQuery = useQuery();
   const [product, setProduct] = useState([]);
+  const [totalPage, setTotalPage] = useState(null);
   const [query, setQuery] = useState({
     search: getQuery.get("search") ? getQuery.get("search") : "",
     categories: getQuery.get("categories") ? getQuery.get("categories") : "",
     minPrice: getQuery.get("minPrice") ? getQuery.get("minPrice") : 0,
     maxPrice: getQuery.get("maxPrice") ? getQuery.get("maxPrice") : 1000000,
     sort: getQuery.get("sort") ? getQuery.get("sort") : "popular",
+    page: getQuery.get("page") ? getQuery.get("page") : 1,
+    limit: getQuery.get("limit") ? getQuery.get("limit") : 8,
   });
 
   const fetchData = async (query) => {
     try {
       const products = await getData(`/products`, query);
+      // setNext(products.data.meta.next);
+      // setPrev(products.data.meta.prev);
+      setQuery({
+        ...query,
+      });
       setProduct(products.data.data);
+      setTotalPage(products.data.meta.totalPage);
     } catch (error) {
       console.log(error);
     }
   };
-
+  console.log(totalPage);
   useEffect(() => {
     fetchData(query);
-  }, [query]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query.search, query.categories, query.page]);
 
   const currency = (price) => {
     return (
@@ -95,7 +105,7 @@ const Products = ({ setSerchParams }) => {
             </div>
           </section>
           <section className={`col-12 col-md-8 ${styles["products-section"]}`}>
-            <div className={`container ${styles["products-container"]}`}>
+            <div className={`${styles["products-container"]}`}>
               <ul className={styles["categories-container"]}>
                 <li
                   onClick={() => {
@@ -186,6 +196,30 @@ const Products = ({ setSerchParams }) => {
                     key={e.id}
                   />
                 ))}
+              </div>
+              <div className={`${styles["paginate-container"]}`}>
+                <p>{`showing page ${query.page} of ${totalPage}`}</p>
+
+                <div className={styles["btn-paginate"]}>
+                  <button
+                    onClick={() => {
+                      setQuery({ ...query, page: query.page - 1 });
+                    }}
+                    disabled={query.page === 1 ? true : false}
+                    className={`${styles["btn-prev"]}`}
+                  >
+                    prev
+                  </button>
+                  <button
+                    onClick={() => {
+                      setQuery({ ...query, page: query.page + 1 });
+                    }}
+                    disabled={query.page === totalPage ? true : false}
+                    className={`${styles["btn-next"]}`}
+                  >
+                    next
+                  </button>
+                </div>
               </div>
             </div>
           </section>
