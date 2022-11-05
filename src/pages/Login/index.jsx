@@ -18,19 +18,6 @@ class Login extends Component {
   submitHandler = (e) => {
     e.preventDefault();
     this.props.dispatch(loginAction(this.state.body));
-    if (this.props.auths.isError)
-      return this.setState({
-        toastInfo: {
-          display: true,
-          status: "error",
-          message: this.props.auths.error,
-        },
-      });
-    if (this.props.auths.isFulfilled) {
-      const userInfo = this.props.auths.userData;
-      localStorage.setItem("userInfo", JSON.stringify(userInfo));
-      if (userInfo) this.props.navigate("/");
-    }
   };
 
   changeHandler = (e) => {
@@ -43,7 +30,21 @@ class Login extends Component {
     const userinfo = JSON.parse(localStorage.getItem("userInfo"));
     if (userinfo) this.props.navigate("/");
   }
-  componentDidUpdate() {}
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.auths.isError && !prevProps.auths.isError)
+      return this.setState({
+        toastInfo: {
+          display: true,
+          status: "error",
+          message: this.props.auths.error,
+        },
+      });
+    if (this.props.auths.isFulfilled && !prevProps.auths.isFulfilled) {
+      const userInfo = this.props.auths.userData;
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      if (userInfo) this.props.navigate("/");
+    }
+  }
   render() {
     const { navigate } = this.props;
     console.log(this.state.body);

@@ -1,27 +1,71 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import NavBar from "../../components/NavBar/NavBar";
 import styles from "./Profile.module.css";
 import iconEdit from "../../assets/img/profile/edit-icon.png";
 import avatar from "../../assets/img/profile/profile-dummy.png";
-import { getProfile } from "../../utils/fetcher";
+import { editProfile, getProfile } from "../../utils/fetcher";
 import withNavigate from "../../helpers/withNavigate";
+import { connect } from "react-redux";
+import { logoutAction } from "../../redux/actions/auths";
 
-const Profile = ({ navigate }) => {
+const Profile = ({ navigate, dispatch }) => {
   const token = JSON.parse(localStorage.getItem("userInfo")).token;
+  const refTarget = useRef(null);
   const [profile, setProfile] = useState({});
-  const requestProfile = async (token) => {
+  const [body, setBody] = useState({});
+  const [notEdit, setNotEdit] = useState(true);
+
+  const onEdit = () => {
+    setNotEdit(!notEdit);
+  };
+  const getBirthday = () => {
+    const date = new Date(profile.birthday);
+    const yyyy = date.getFullYear();
+    let mm = date.getMonth() + 1; // Months start at 0!
+    let dd = date.getDate();
+
+    if (dd < 10) dd = "0" + dd;
+    if (mm < 10) mm = "0" + mm;
+
+    return dd + "/" + mm + "/" + yyyy;
+  };
+  const requestProfile = async () => {
     try {
-      const res = await getProfile(token);
+      const res = await getProfile();
       setProfile(res.data.data[0]);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const changeHandler = (e) => [
+    setBody({ ...body, [e.target.name]: e.target.value }),
+  ];
+
+  const imageHandler = (e) => {
+    setBody({ ...body, image: e.target.files[0] });
+  };
+  const handleChanges = async (body) => {
+    const formData = new FormData();
+    Object.keys(body).forEach((e) => {
+      formData.append(e, body[e]);
+    });
+    console.log(formData);
+    try {
+      await editProfile(formData, token);
+      onEdit();
+      setProfile({});
+      await requestProfile();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(profile);
   useState(() => {
-    requestProfile(token);
-    console.log(profile);
-  }, []);
+    requestProfile();
+  }, [handleChanges]);
+  console.log(profile.birthday);
   return (
     <Fragment>
       <NavBar />
@@ -48,9 +92,20 @@ const Profile = ({ navigate }) => {
               <div className={styles["btn-container"]}>
                 <button
                   className={`${styles["btn"]} ${styles["choose-avatar"]}`}
+                  onClick={(e) => {
+                    console.log("click");
+                    e.preventDefault();
+                    refTarget.current.click();
+                  }}
                 >
                   Choose Photo
                 </button>
+                <input
+                  type="file"
+                  ref={refTarget}
+                  onChange={(e) => imageHandler(e)}
+                  style={{ display: "none" }}
+                />
                 <button
                   className={`${styles["btn"]} ${styles["remove-avatar"]}`}
                 >
@@ -64,21 +119,39 @@ const Profile = ({ navigate }) => {
                   Edit Password
                 </button>
               </div>
-              <p className={styles["save-questions"]}>
+              <p className={notEdit ? styles.hide : styles["save-questions"]}>
                 Do you want to save the change's?
               </p>
               <div className={styles["btn-container"]}>
                 <button
-                  className={`${styles["btn"]} ${styles["save-user-info"]}`}
+                  onClick={() => {
+                    handleChanges(body);
+                  }}
+                  className={
+                    notEdit
+                      ? styles.hide
+                      : `${styles["btn"]} ${styles["save-user-info"]}`
+                  }
                 >
                   Save Change
                 </button>
-                <button className={`${styles["btn"]} ${styles["cancel"]}`}>
+                <button
+                  onClick={() => {
+                    setBody({});
+                    onEdit();
+                  }}
+                  className={
+                    notEdit
+                      ? styles.hide
+                      : `${styles["btn"]} ${styles["cancel"]}`
+                  }
+                >
                   Cancel
                 </button>
               </div>
               <div
                 onClick={() => {
+                  dispatch(logoutAction(token));
                   localStorage.removeItem("userInfo");
                   navigate("/login");
                 }}
@@ -90,8 +163,13 @@ const Profile = ({ navigate }) => {
               </div>
             </aside>
             <aside className={`${styles["edit"]} ${styles["details"]}`}>
-              <div className={styles["edit-icon-container"]}>
-                <img src={iconEdit} alt="" />
+              <div
+                onClick={() => {
+                  onEdit();
+                }}
+                className={styles["edit-icon-container"]}
+              >
+                <img src={iconEdit} alt="pen" />
               </div>
               <div
                 className={`${styles["details-container"]} ${styles["contact-htmlForm"]}`}
@@ -101,17 +179,35 @@ const Profile = ({ navigate }) => {
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
                       <label htmlFor="email">Email address:</label>
-                      <input type="text" placeholder={profile.email} />
+                      <input
+                        disabled={notEdit}
+                        name="email"
+                        onChange={changeHandler}
+                        type="text"
+                        placeholder={profile.email}
+                      />
                     </div>
                     <div className={styles["form-item"]}>
                       <label htmlFor="email">Delivery address:</label>
-                      <input type="text" placeholder={profile.address} />
+                      <input
+                        disabled={notEdit}
+                        onChange={changeHandler}
+                        name="address"
+                        type="text"
+                        placeholder={profile.address}
+                      />
                     </div>
                   </div>
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
                       <label htmlFor="phone-number">Phone number:</label>
-                      <input type="tel" placeholder={profile.phone} />
+                      <input
+                        disabled={notEdit}
+                        onChange={changeHandler}
+                        name="phone"
+                        type="tel"
+                        placeholder={profile.phone}
+                      />
                     </div>
                   </div>
                 </form>
@@ -125,6 +221,9 @@ const Profile = ({ navigate }) => {
                     <div className={styles["form-item"]}>
                       <label htmlFor="name">Display name:</label>
                       <input
+                        disabled={notEdit}
+                        onChange={changeHandler}
+                        name="display_name"
                         type="text"
                         placeholder={profile.display_name || "your name here"}
                       />
@@ -132,6 +231,9 @@ const Profile = ({ navigate }) => {
                     <div className={styles["form-item"]}>
                       <label htmlFor="first-name">First name:</label>
                       <input
+                        disabled={notEdit}
+                        onChange={changeHandler}
+                        name="first_name"
                         type="text"
                         placeholder={profile.first_name || "your name here"}
                       />
@@ -139,27 +241,64 @@ const Profile = ({ navigate }) => {
                     <div className={styles["form-item"]}>
                       <label htmlFor="last-name">Last name:</label>
                       <input
+                        disabled={notEdit}
+                        onChange={changeHandler}
+                        name="last_name"
                         type="text"
-                        placeholder={profile.first_name || "your name here"}
+                        placeholder={profile.last_name || "your name here"}
                       />
                     </div>
                   </div>
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
                       <label htmlFor="birthday">Birthday:</label>
-                      <input type="date" placeholder={profile.birthday} />
+                      <input
+                        disabled={notEdit}
+                        onChange={changeHandler}
+                        name="birthday"
+                        type={notEdit ? "text" : "date"}
+                        placeholder={getBirthday()}
+                      />
                     </div>
                   </div>
                 </form>
               </div>
               <div className={styles["gender-selector"]}>
                 <div className={styles["radio-container"]}>
-                  <input type="radio" placeholder="Male" name="choice" />
+                  <input
+                    disabled={notEdit}
+                    defaultChecked={
+                      profile.gender && profile.gender === "Male"
+                        ? "true"
+                        : "false"
+                    }
+                    type="radio"
+                    placeholder="Male"
+                    name="gender"
+                    value="Male"
+                    onClick={(e) => {
+                      setBody({ ...body, gender: e.target.value });
+                    }}
+                  />
                   <label htmlFor="male">Male</label>
                 </div>
                 <div className={styles["radio-container"]}>
-                  <input type="radio" placeholder="Female" name="choice" />
-                  <label for="female">Female</label>
+                  <input
+                    disabled={notEdit}
+                    defaultChecked={
+                      profile.gender && profile.gender === "Female"
+                        ? "true"
+                        : "false"
+                    }
+                    type="radio"
+                    placeholder="Female"
+                    name="gender"
+                    value="Female"
+                    onClick={(e) => {
+                      setBody({ ...body, gender: e.target.value });
+                    }}
+                  />
+                  <label htmlFor="female">Female</label>
                 </div>
               </div>
             </aside>
@@ -170,5 +309,7 @@ const Profile = ({ navigate }) => {
     </Fragment>
   );
 };
-
-export default withNavigate(Profile);
+const stateProps = (reduxState) => {
+  return reduxState;
+};
+export default withNavigate(connect(stateProps)(Profile));

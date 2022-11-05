@@ -10,6 +10,8 @@ import History from "../pages/History/History";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import Payment from "../pages/Payment/Payment";
 import TestPage from "../pages/Test Page/Test";
+import AddProduct from "../pages/Admin/AddProducts";
+import AddPromo from "../pages/Admin/AddPromo";
 
 const router = Router([
   {
@@ -47,6 +49,14 @@ const router = Router([
   {
     path: "/payment",
     element: <Payment />,
+  },
+  {
+    path: "/add-product",
+    element: <AddProduct />,
+  },
+  {
+    path: "/add-promo",
+    element: <AddPromo />,
   },
   {
     path: "/test",

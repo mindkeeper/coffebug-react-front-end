@@ -14,18 +14,17 @@ const useQuery = () => {
   return useMemo(() => new URLSearchParams(search), [search]);
 };
 
-const Products = ({ setSerchParams }) => {
+const Products = ({ setSearchParams }) => {
   const getQuery = useQuery();
   const [product, setProduct] = useState([]);
   const [totalPage, setTotalPage] = useState(null);
   const [query, setQuery] = useState({
-    search: getQuery.get("search") ? getQuery.get("search") : "",
-    categories: getQuery.get("categories") ? getQuery.get("categories") : "",
-    minPrice: getQuery.get("minPrice") ? getQuery.get("minPrice") : 0,
-    maxPrice: getQuery.get("maxPrice") ? getQuery.get("maxPrice") : 1000000,
-    sort: getQuery.get("sort") ? getQuery.get("sort") : "popular",
+    // search: getQuery.get("search") ? getQuery.get("search") : "",
+    // categories: getQuery.get("categories") ? getQuery.get("categories") : "",
+    // minPrice: getQuery.get("minPrice") ? getQuery.get("minPrice") : 0,
+    // maxPrice: getQuery.get("maxPrice") ? getQuery.get("maxPrice") : 1000000,
+    // sort: getQuery.get("sort") ? getQuery.get("sort") : "popular",
     page: getQuery.get("page") ? getQuery.get("page") : 1,
-    limit: getQuery.get("limit") ? getQuery.get("limit") : 8,
   });
 
   const fetchData = async (query) => {
@@ -44,6 +43,8 @@ const Products = ({ setSerchParams }) => {
   };
   console.log(totalPage);
   useEffect(() => {
+    const urlSearchParams = createSearchParams({ ...query });
+    setSearchParams(urlSearchParams);
     fetchData(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query.search, query.categories, query.page]);
@@ -110,12 +111,8 @@ const Products = ({ setSerchParams }) => {
                 <li
                   onClick={() => {
                     setQuery({
-                      ...query,
                       sort: "popular",
-                      categories: "",
-                      search: "",
-                      minPrice: 0,
-                      maxPrice: 1000000,
+                      page: 1,
                     });
                   }}
                 >
@@ -124,15 +121,11 @@ const Products = ({ setSerchParams }) => {
                 <li
                   onClick={() => {
                     setQuery({
-                      ...query,
-                      sort: "",
                       categories: "coffee",
-                      search: "",
-                      minPrice: 0,
-                      maxPrice: 1000000,
+                      page: 1,
                     });
                     const urlSearchParams = createSearchParams({ ...query });
-                    setSerchParams(urlSearchParams);
+                    setSearchParams(urlSearchParams);
                   }}
                 >
                   Coffe
@@ -140,15 +133,11 @@ const Products = ({ setSerchParams }) => {
                 <li
                   onClick={() => {
                     setQuery({
-                      ...query,
-                      sort: "",
                       categories: "non-coffee",
-                      search: "",
-                      minPrice: 0,
-                      maxPrice: 1000000,
+                      page: 1,
                     });
                     const urlSearchParams = createSearchParams({ ...query });
-                    setSerchParams(urlSearchParams);
+                    setSearchParams(urlSearchParams);
                   }}
                 >
                   Non Coffe
@@ -156,15 +145,9 @@ const Products = ({ setSerchParams }) => {
                 <li
                   onClick={() => {
                     setQuery({
-                      ...query,
-                      sort: "",
                       categories: "foods",
-                      search: "",
-                      minPrice: 0,
-                      maxPrice: 1000000,
+                      page: 1,
                     });
-                    const urlSearchParams = createSearchParams({ ...query });
-                    setSerchParams(urlSearchParams);
                   }}
                 >
                   Foods
@@ -172,15 +155,9 @@ const Products = ({ setSerchParams }) => {
                 <li
                   onClick={() => {
                     setQuery({
-                      ...query,
-                      sort: "",
                       categories: "add-on",
-                      search: "",
-                      minPrice: 0,
-                      maxPrice: 1000000,
+                      page: 1,
                     });
-                    const urlSearchParams = createSearchParams({ ...query });
-                    setSerchParams(urlSearchParams);
                   }}
                 >
                   Add-on

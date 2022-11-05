@@ -1,4 +1,4 @@
-import { login } from "../../utils/fetcher";
+import { login, logout } from "../../utils/fetcher";
 import { ACTION_STRING } from "./actionStrings";
 
 export const loginAction = (body) => {
@@ -8,8 +8,9 @@ export const loginAction = (body) => {
   };
 };
 
-export const logoutAction = () => {
+export const logoutAction = (token) => {
   return {
     type: ACTION_STRING.authLogout,
+    payload: logout(token),
   };
 };

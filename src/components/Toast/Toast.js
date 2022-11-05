@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./Toast.module.css";
 function Toast({ display, status, message, changeState }) {
-  const [show, setShow] = useState(display);
-
   return (
     <div
       onClick={() => {

@@ -59,6 +59,7 @@ class SignUp extends Component {
     }
   };
   render() {
+    const { navigate } = this.props;
     return (
       <Fragment>
         <Toast
@@ -130,7 +131,7 @@ class SignUp extends Component {
                   </div>
                   <button
                     onClick={() => {
-                      this.navigate("/login");
+                      navigate("/login");
                     }}
                     className={`${styles["btn"]} ${styles["login"]}`}
                   >

@@ -30,6 +30,7 @@ const authsReducer = (prevState = initialState, action) => {
         isLoading: false,
         isError: true,
         error: errorRes,
+        isFulfilled: false,
       };
     case authLogin.concat("_", Fulfilled):
       const response = action.payload;
@@ -44,7 +45,24 @@ const authsReducer = (prevState = initialState, action) => {
           token: response.data.data.token,
         },
       };
-
+    case authLogout.concat("_", Pending):
+      return {
+        ...prevState,
+        isLoading: true,
+        isError: false,
+      };
+    case authLogout.concat("_", Rejected):
+      const errorLogout = action.payload.response.data.msg;
+      return {
+        ...prevState,
+        isLoading: false,
+        isError: true,
+        error: errorLogout,
+      };
+    case authLogout.concat("_", Fulfilled):
+      return {
+        initialState,
+      };
     default:
       return prevState;
   }

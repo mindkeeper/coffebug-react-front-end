@@ -223,7 +223,7 @@ p.display-name {
   position: absolute;
   top: 32px;
   right: 21px;
-  padding-top: 6px;
+  padding-top: 2px;
   padding-left: 6px;
   background: #6a4029;
   width: 2rem;
@@ -242,7 +242,9 @@ p.display-name {
   align-items: center;
   margin-bottom: 2rem;
 }
-
+.hide {
+  display: none;
+}
 @media screen and (max-width: 768px) {
   .nav-link {
     display: none;
