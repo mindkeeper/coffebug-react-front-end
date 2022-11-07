@@ -7,6 +7,7 @@ export const ACTION_STRING = {
   getProducts: "_GET_PRODUCTS",
   createProduct: "_CREATE_PRODUCT",
   updateProducts: "_UPDATE_PRODUCT",
+  getDetailProduct: "_GET_PRODUCT_DETAIL",
   getProfile: "_GET_PROFILE",
   updateProfile: "_UPDATE_PROFILE",
 };

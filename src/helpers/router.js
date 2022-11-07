@@ -14,6 +14,7 @@ import AddProduct from "../pages/Admin/AddProducts";
 import AddPromo from "../pages/Admin/AddPromo";
 import PrivateElement from "../components/PrivateElement";
 import ProductsAdmin from "../pages/Admin/Products/Products";
+import EditProduct from "../pages/Admin/EditProduct";
 
 const router = Router([
   {
@@ -86,6 +87,14 @@ const router = Router([
     element: (
       <PrivateElement allowedRoles={["Admin"]}>
         <ProductsAdmin />
+      </PrivateElement>
+    ),
+  },
+  {
+    path: "/admin/edit-product/:id",
+    element: (
+      <PrivateElement allowedRoles={["Admin"]}>
+        <EditProduct />
       </PrivateElement>
     ),
   },
