@@ -36,6 +36,16 @@ p {
   justify-content: space-around;
 }
 .size {
+  padding: 1rem 1.4rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border-radius: 50%;
+  margin-bottom: 0;
+  background: #ffba33;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.size-xl {
   padding: 1rem;
   font-size: 1.25rem;
   font-weight: bold;
@@ -45,11 +55,14 @@ p {
   cursor: pointer;
   transition: transform 0.2s;
 }
-.size:hover {
+.size:hover,
+.size-xl:hover {
   transform: scale(1.1);
 }
 .check-out {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 1rem;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.34);
   border-radius: 20px;
@@ -81,8 +94,15 @@ p {
   margin-bottom: 0;
   font-weight: 700;
 }
+.checkout-left {
+  gap: 1rem;
+  display: flex;
+  justify-content: flex-start;
+}
 .arrow {
   padding: 0.25rem 0.5rem;
+  width: 3rem;
+  aspect-ratio: 1;
   background: #ffba33;
   border-radius: 50%;
   font-size: 2rem;

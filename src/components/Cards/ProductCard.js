@@ -2,8 +2,8 @@ import React, { Fragment } from "react";
 
 import styles from "./styles/ProductCard.module.css";
 import withNavigate from "../../helpers/withNavigate";
-
-const ProductCard = ({ navigate, id, productName, price, image }) => {
+import iconEdit from "../../assets/img/profile/edit-icon.png";
+const ProductCard = ({ navigate, id, productName, price, image, display }) => {
   return (
     <Fragment>
       <div
@@ -12,13 +12,12 @@ const ProductCard = ({ navigate, id, productName, price, image }) => {
           navigate(`/products/${id}`);
         }}
       >
-        <img
-          src={`http://localhost:8080/${image}`}
-          alt=""
-          className={styles["product-img"]}
-        />
+        <img src={`${image}`} alt="" className={styles["product-img"]} />
         <p className={styles["product-name"]}>{productName}</p>
         <p className={styles["product-price"]}>{price}</p>
+        <div className={`${styles["edit-icon-container"]} ${styles[display]}`}>
+          <img src={iconEdit} alt="pen" />
+        </div>
       </div>
     </Fragment>
   );

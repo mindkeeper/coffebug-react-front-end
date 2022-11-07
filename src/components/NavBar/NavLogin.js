@@ -4,24 +4,37 @@ import styles from "./NavBar.module.css";
 import chatLogo from "../../assets/img/nav/chat-logo.png";
 import avatar from "../../assets/img/nav/profile-dummy.png";
 import searchLogo from "../../assets/img/nav/search-logo.png";
+import { useEffect } from "react";
+import { getProfile } from "../../utils/fetcher";
 
 const LoginNav = ({ navigate }) => {
   const [search, setSearch] = useState(() => "");
   const [show, setShow] = useState(false);
-
+  const [profile, setProfile] = useState([]);
   const showInput = () => {
     setShow(!show);
   };
-  const getImageIcon = JSON.parse(localStorage.getItem("userInfo")).image;
 
-  const imageIcon = `http://localhost:8080/${getImageIcon}`;
+  const requestProfile = async () => {
+    try {
+      const res = await getProfile();
+      setProfile(res.data.data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const setValue = (event) => {
     setSearch(event.target.value);
   };
-  console.log(JSON.parse(localStorage.getItem("userInfo")).token);
+  useEffect(() => {
+    requestProfile();
+  }, []);
+
   const getSearch = () => {
     return navigate(`/products?search=${search}`);
   };
+  const imageIcon = `${profile.image}`;
   return (
     <section className={`${styles["button-container"]} col-6 col-md-3`}>
       <form onSubmit={getSearch}>
@@ -45,7 +58,7 @@ const LoginNav = ({ navigate }) => {
         onClick={() => {
           navigate("/profile/");
         }}
-        src={getImageIcon ? imageIcon : avatar}
+        src={imageIcon ?? avatar}
         className={styles["profile"]}
         alt="Profile-icon"
       ></img>

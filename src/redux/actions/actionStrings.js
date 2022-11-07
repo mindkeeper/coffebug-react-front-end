@@ -4,5 +4,9 @@ export const ACTION_STRING = {
   pending: "_PENDING",
   fulfilled: "_FULFILLED",
   rejected: "_REJECTED",
-  getProduct: "_GET_PRODUCTS",
+  getProducts: "_GET_PRODUCTS",
+  createProduct: "_CREATE_PRODUCT",
+  updateProducts: "_UPDATE_PRODUCT",
+  getProfile: "_GET_PROFILE",
+  updateProfile: "_UPDATE_PROFILE",
 };

@@ -92,6 +92,32 @@
   gap: 1.5rem;
   width: 80%;
 }
+.box-dropdown {
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 20px;
+  border-radius: 15px;
+  border: 1px solid #9f9f9f;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+}
+
+.box-dropdown p {
+  color: #9f9f9f;
+}
+.arrows {
+  padding-top: 6px;
+  font-size: 15px !important;
+  display: flex;
+}
 @media screen and (max-width: 500px) {
   .main-section {
     flex-direction: column;

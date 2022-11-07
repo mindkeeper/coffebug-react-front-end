@@ -1,12 +1,10 @@
 import axios from "axios";
-
-const baseUrl = "http://localhost:8080";
-const prefix = "/api";
+const baseUrl = process.env.REACT_APP_BACKEND_HOST;
 
 const axiosRequest = (method, url, data, params) => {
   return axios({
     method,
-    url: `${baseUrl}${prefix}${url}`,
+    url: `${baseUrl}${url}`,
     data,
     params,
   });
@@ -15,7 +13,7 @@ const axiosRequest = (method, url, data, params) => {
 export const editProfile = (data, token) => {
   return axios({
     method: "PATCH",
-    url: `${baseUrl}${prefix}/users/edit-profile`,
+    url: `${baseUrl}/users/edit-profile`,
     data,
     headers: { "x-access-token": token },
   });
@@ -24,10 +22,18 @@ export const getData = (url, params, data) => {
   return axiosRequest("GET", url, data, params);
 };
 
+export const postData = (token, data) => {
+  return axios({
+    method: "POST",
+    url: `${baseUrl}/products`,
+    data,
+    headers: { "x-access-token": token },
+  });
+};
 export const logout = (token) => {
   return axios({
     method: "DELETE",
-    url: `${baseUrl}${prefix}/auths/logout`,
+    url: `${baseUrl}/auths/logout`,
     headers: { "x-access-token": token },
   });
 };
@@ -43,7 +49,7 @@ export const getProfile = () => {
 
   return axios({
     method: "GET",
-    url: `${baseUrl}${prefix}/users`,
+    url: `${baseUrl}/users`,
     headers: { "x-access-token": token },
   });
 };
@@ -51,7 +57,7 @@ export const getProfile = () => {
 export const getHistory = (token) => {
   return axios({
     method: "GET",
-    url: `${baseUrl}${prefix}/transactions/history`,
+    url: `${baseUrl}/transactions/history`,
     headers: { "x-access-token": token },
   });
 };

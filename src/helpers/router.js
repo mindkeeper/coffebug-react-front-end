@@ -12,6 +12,8 @@ import Payment from "../pages/Payment/Payment";
 import TestPage from "../pages/Test Page/Test";
 import AddProduct from "../pages/Admin/AddProducts";
 import AddPromo from "../pages/Admin/AddPromo";
+import PrivateElement from "../components/PrivateElement";
+import ProductsAdmin from "../pages/Admin/Products/Products";
 
 const router = Router([
   {
@@ -32,7 +34,11 @@ const router = Router([
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: (
+      <PrivateElement allowedRoles={["User"]}>
+        <Profile />
+      </PrivateElement>
+    ),
   },
   {
     path: "/products/:id",
@@ -40,7 +46,11 @@ const router = Router([
   },
   {
     path: "/history",
-    element: <History />,
+    element: (
+      <PrivateElement allowedRoles={["User"]}>
+        <History />
+      </PrivateElement>
+    ),
   },
   {
     path: "/reset-password",
@@ -61,6 +71,11 @@ const router = Router([
   {
     path: "/test",
     element: <TestPage />,
+  },
+
+  {
+    path: "/admin/products",
+    element: <ProductsAdmin />,
   },
 ]);
 

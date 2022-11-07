@@ -3,17 +3,10 @@ import Footer from "../../components/Footer/Footer";
 import NavBar from "../../components/NavBar/NavBar";
 import styles from "./DetailsProduct.module.css";
 import { useParams } from "react-router-dom";
+import arrow from "../../assets/img/arrow.png";
 import { getData } from "../../utils/fetcher";
 const DetailsProduct = () => {
-  const [product, setProduct] = useState({
-    category_name: "",
-    product_name: "",
-    id: "",
-    image: "",
-    price: 0,
-    sold: "",
-    description: "",
-  });
+  const [product, setProduct] = useState({});
   const [count, setCount] = useState(0);
   const [size, setSize] = useState("Regular");
   const { id } = useParams();
@@ -46,7 +39,10 @@ const DetailsProduct = () => {
   };
 
   const decrement = () => {
-    setCount((prevState) => prevState - 1);
+    setCount((prevState) => {
+      if (prevState === 0) return 0;
+      return prevState - 1;
+    });
   };
   return (
     <Fragment>
@@ -130,7 +126,9 @@ const DetailsProduct = () => {
                     &#62;
                   </span>
                 </div>
-                <p className={styles["price"]}>{currency(product.price)}</p>
+                <p className={styles["price"]}>
+                  {currency(product.price * count)}
+                </p>
               </div>
               <div className={styles["buttons"]}>
                 <button className={`${styles["btn"]} ${styles["add-to-cart"]}`}>
@@ -145,7 +143,7 @@ const DetailsProduct = () => {
           <section
             className={`col-12 row align-items-center ${styles["finalize-container"]}`}
           >
-            <div className={`col-4 col-md-3 ${styles["sizes-container"]}`}>
+            <div className={`col-12 col-md-3 ${styles["sizes-container"]}`}>
               <p className={`${styles["choose-text"]} text-center`}>
                 Choose a size
               </p>
@@ -170,33 +168,31 @@ const DetailsProduct = () => {
                   onClick={() => {
                     changeSize("Extra Large");
                   }}
-                  className={`${styles["size"]}`}
+                  className={`${styles["size-xl"]}`}
                 >
                   XL
                 </p>
               </div>
             </div>
-            <div
-              className={`col-8 col-md-8 row aling-items-center ${styles["check-out"]}`}
-            >
-              <img
-                src={`http://localhost:8080/${product.image}`}
-                alt=""
-                className={`${styles["selected-item"]} col-3`}
-              />
-              <div className={`${styles["selected-item-detail"]} col-4`}>
-                <p className={`${styles["item-name"]} `}>
-                  {product.product_name}
-                </p>
-                <p className={`${styles["qty"]} `}>
-                  ({count}) {size}
-                </p>
+            <div className={`col-12 col-md-8 ${styles["check-out"]}`}>
+              <div className={styles["checkout-left"]}>
+                <img
+                  src={`http://localhost:8080/${product.image}`}
+                  alt=""
+                  className={`${styles["selected-item"]}`}
+                />
+                <div className={`${styles["selected-item-detail"]}`}>
+                  <p className={`${styles["item-name"]} `}>
+                    {product.product_name}
+                  </p>
+                  <p className={`${styles["qty"]} `}>
+                    ({count}) {size}
+                  </p>
+                </div>
               </div>
-              <div className={`${styles["final-container"]} col-5`}>
+              <div className={`${styles["final-container"]}`}>
                 <p className={`${styles["checkout-title"]}`}>Checkout</p>
-                <p className={`${styles["arrow"]}`}>
-                  <strong>&#8594;</strong>
-                </p>
+                <img className={styles["arrow"]} src={arrow} alt="arrow" />
               </div>
             </div>
           </section>

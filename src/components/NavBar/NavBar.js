@@ -49,7 +49,13 @@ const NavBar = ({ navigate }) => {
               >
                 Products
               </li>
-              <li>Your Cart</li>
+              <li
+                onClick={() => {
+                  navigate("/payment");
+                }}
+              >
+                Your Cart
+              </li>
               <li
                 onClick={() => {
                   navigate("/history");
