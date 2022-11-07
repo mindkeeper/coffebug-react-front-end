@@ -4,16 +4,21 @@ import NavBar from "../../components/NavBar/NavBar";
 import styles from "./Profile.module.css";
 import iconEdit from "../../assets/img/profile/edit-icon.png";
 import avatar from "../../assets/img/profile/profile-dummy.png";
-import { editProfile, getProfile } from "../../utils/fetcher";
+import { editProfile } from "../../utils/fetcher";
 import withNavigate from "../../helpers/withNavigate";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../../redux/actions/auths";
+import Toast from "../../components/Toast/Toast";
+import { getProfileActions } from "../../redux/actions/profile";
 
-const Profile = ({ navigate, dispatch }) => {
+const Profile = ({ navigate }) => {
+  const dispatch = useDispatch();
   const token = JSON.parse(localStorage.getItem("userInfo")).token;
   const refTarget = useRef(null);
-  const [profile, setProfile] = useState({});
+  const profile = useSelector((state) => state.profileProps.profile);
   const [body, setBody] = useState({});
+  const [toastInfo, setToastInfo] = useState({ display: false });
+  const [imgPreview, setImgPreview] = useState(null);
   const [notEdit, setNotEdit] = useState(true);
 
   const onEdit = () => {
@@ -30,21 +35,33 @@ const Profile = ({ navigate, dispatch }) => {
 
     return dd + "/" + mm + "/" + yyyy;
   };
-  const requestProfile = async () => {
-    try {
-      const res = await getProfile();
-      setProfile(res.data.data[0]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const changeHandler = (e) => [
     setBody({ ...body, [e.target.name]: e.target.value }),
   ];
 
   const imageHandler = (e) => {
-    setBody({ ...body, image: e.target.files[0] });
+    const photo = e.target.files[0];
+    const defaultSize = 2 * 1024 * 1024;
+    if (
+      photo.type !== "image/jpeg" &&
+      photo.type !== "image/jpg" &&
+      photo.type !== "image/png"
+    )
+      return setToastInfo({
+        display: true,
+        status: "error",
+        message: "Extension file wrong! Only .jpeg, .jpg, .png are allowed.",
+      });
+
+    if (photo.size > defaultSize)
+      return setToastInfo({
+        display: true,
+        status: "error",
+        message: "File to large. Max. file size 2 Mb",
+      });
+    setBody({ ...body, image: photo });
+    setImgPreview(URL.createObjectURL(photo));
   };
   const handleChanges = async (body) => {
     const formData = new FormData();
@@ -54,20 +71,32 @@ const Profile = ({ navigate, dispatch }) => {
     console.log(formData);
     try {
       await editProfile(formData, token);
+      dispatch(getProfileActions());
       onEdit();
-      setProfile({});
-      await requestProfile();
+      setToastInfo({
+        display: true,
+        status: "success",
+        message: "Update Profile Success",
+      });
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(profile);
+
   useState(() => {
-    requestProfile();
+    dispatch(getProfileActions());
   }, [handleChanges]);
-  console.log(profile.birthday);
+  console.log(body);
   return (
     <Fragment>
+      <Toast
+        status={toastInfo.status}
+        message={toastInfo.message}
+        display={!toastInfo.display ? "none" : "flex"}
+        changeState={(value) => {
+          setToastInfo({ display: value });
+        }}
+      />
       <NavBar />
       <main className={styles["main-container"]}>
         <div className={styles["container"]}>
@@ -77,11 +106,7 @@ const Profile = ({ navigate, dispatch }) => {
               <div className={styles["avatar-container"]}>
                 <img
                   className={styles["avatar-img"]}
-                  src={
-                    !profile.image
-                      ? avatar
-                      : `http://localhost:8080/${profile.image}`
-                  }
+                  src={imgPreview ? imgPreview : `${profile.image}`}
                   alt=""
                 />
                 <p className={styles["display-name"]}>
@@ -265,39 +290,50 @@ const Profile = ({ navigate, dispatch }) => {
               </div>
               <div className={styles["gender-selector"]}>
                 <div className={styles["radio-container"]}>
-                  <input
-                    disabled={notEdit}
-                    defaultChecked={
-                      profile.gender && profile.gender === "Male"
-                        ? "true"
-                        : "false"
-                    }
-                    type="radio"
-                    placeholder="Male"
-                    name="gender"
-                    value="Male"
-                    onClick={(e) => {
-                      setBody({ ...body, gender: e.target.value });
-                    }}
-                  />
+                  {notEdit ? (
+                    <input
+                      disabled={true}
+                      // defaultChecked={profile.gender === "Male"}
+                      checked={profile.gender === "Male"}
+                      type="radio"
+                      placeholder="Male"
+                      name="gender"
+                      value="Male"
+                    />
+                  ) : (
+                    <input
+                      // defaultChecked={profile.gender === "Male"}
+
+                      type="radio"
+                      placeholder="Male"
+                      name="gender"
+                      value="Male"
+                      onChange={changeHandler}
+                    />
+                  )}
                   <label htmlFor="male">Male</label>
                 </div>
                 <div className={styles["radio-container"]}>
-                  <input
-                    disabled={notEdit}
-                    defaultChecked={
-                      profile.gender && profile.gender === "Female"
-                        ? "true"
-                        : "false"
-                    }
-                    type="radio"
-                    placeholder="Female"
-                    name="gender"
-                    value="Female"
-                    onClick={(e) => {
-                      setBody({ ...body, gender: e.target.value });
-                    }}
-                  />
+                  {notEdit ? (
+                    <input
+                      disabled={true}
+                      // defaultChecked={profile.gender === "Female"}
+                      checked={profile.gender === "Female"}
+                      type="radio"
+                      placeholder="Female"
+                      name="gender"
+                      value="Female"
+                    />
+                  ) : (
+                    <input
+                      // defaultChecked={profile.gender === "Female"}
+                      type="radio"
+                      placeholder="Female"
+                      name="gender"
+                      value="Female"
+                      onChange={changeHandler}
+                    />
+                  )}
                   <label htmlFor="female">Female</label>
                 </div>
               </div>
@@ -309,7 +345,5 @@ const Profile = ({ navigate, dispatch }) => {
     </Fragment>
   );
 };
-const stateProps = (reduxState) => {
-  return reduxState;
-};
-export default withNavigate(connect(stateProps)(Profile));
+
+export default withNavigate(Profile);
