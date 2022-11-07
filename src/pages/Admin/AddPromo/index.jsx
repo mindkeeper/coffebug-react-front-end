@@ -5,6 +5,7 @@ import styles from "./styles.module.css";
 import camera from "../../../assets/img/addProduct/camera.png";
 import { useNavigate } from "react-router-dom";
 import Toast from "../../../components/Toast/Toast";
+import { postPromo } from "../../../utils/fetcher";
 
 const AddPromo = () => {
   const token = JSON.parse(localStorage.getItem("userInfo")).token || "";
@@ -42,12 +43,13 @@ const AddPromo = () => {
   };
   const submitHandler = async () => {
     if (
-      !body.image ||
-      !body.promo_name ||
       !body.code ||
       !body.description ||
-      !body.price ||
-      !body.duration
+      !body.discount ||
+      !body.duration ||
+      !body.image ||
+      !body.min_price ||
+      !body.promo_name
     ) {
       return setToastInfo({
         display: true,
@@ -60,7 +62,7 @@ const AddPromo = () => {
       formData.append(e, body[e]);
     });
     try {
-      const response = await (token, formData);
+      const response = await postPromo(token, formData);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -131,7 +133,13 @@ const AddPromo = () => {
             </form>
             <form action="" className={styles["form-discount"]}>
               <label htmlFor="discount">Enter Discount:</label>
-              <input onChange={changeHandler} name="discount" type="text" />
+              <input
+                onChange={(e) => {
+                  setBody({ ...body, discount: e.target.value / 100 });
+                }}
+                name="discount"
+                type="text"
+              />
               <label htmlFor="durations">Durations:</label>
               <input onChange={changeHandler} name="duration" type="number" />
               <label htmlFor="code">Input Coupon Code:</label>
@@ -150,7 +158,7 @@ const AddPromo = () => {
               <label htmlFor="price">Price:</label>
               <input
                 onChange={changeHandler}
-                name="price"
+                name="min_price"
                 placeholder="Input price"
                 type="text"
               />
@@ -163,7 +171,12 @@ const AddPromo = () => {
               />
             </form>
             <div className={styles["btn-container"]}>
-              <button className={`${styles["btn"]} ${styles["btn-save"]}`}>
+              <button
+                onClick={() => {
+                  submitHandler();
+                }}
+                className={`${styles["btn"]} ${styles["btn-save"]}`}
+              >
                 Save Product
               </button>
               <button className={`${styles["btn"]} ${styles["btn-cancel"]}`}>

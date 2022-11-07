@@ -61,6 +61,30 @@ li.button {
   background: #78482e;
   transform: scaleX(1.1);
 }
+.add-promo {
+  background-color: #ffba33;
+  color: #6a4029;
+  width: 78%;
+  padding: 1rem;
+  border-radius: 1.25rem;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  border: none;
+}
+.add-product {
+  border: none;
+  width: 90%;
+  margin: 0 auto;
+  background-color: #6a4029;
+  border-radius: 1rem;
+  color: white;
+  padding: 1rem;
+  font-weight: bold;
+}
+.add-promo:hover {
+  background: #f2c468;
+  transform: scaleX(1.1);
+}
 .terms-text {
   margin: 0;
   font-weight: bold;
@@ -76,7 +100,6 @@ li.button {
   display: flex;
   justify-content: space-between;
   padding: 0;
-  margin-bottom: 4rem;
 }
 .categories-container li {
   text-decoration: none;
@@ -99,7 +122,7 @@ li.button {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2rem;
 }
 .product-list-container {
   width: 100%;
@@ -143,6 +166,11 @@ li.button {
 .none {
   display: none;
 }
+.dropdown-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4rem;
+}
 .dropdown {
   display: flex;
   flex-direction: column;
@@ -172,6 +200,34 @@ li.button {
   color: #9f9f9f;
   font-size: 1rem;
 }
+.dropdown-btn:hover {
+  transform: scale(1.1);
+  transition: all 0.5s;
+}
+.dropdown-content {
+  position: absolute;
+  top: 3rem;
+  width: 100%;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 3px 3px 10px 6px rgb(0, 0, 0, 0.06);
+  z-index: 1000;
+}
+.dropdown-content .dropdown-item {
+  padding: 1rem 0;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+.dropdown-content .dropdown-item:hover {
+  background-color: #6a4029;
+  color: white;
+}
+.dropdown-content .dropdown-item p {
+  margin: 0;
+}
+.active {
+  background-color: #ffcb65;
+}
 /* products end */
 /* main end */
 
@@ -186,4 +242,19 @@ li.button {
     margin-bottom: 2rem;
     border-bottom: 1px solid #4f5665;
   }
+  .product-list-container {
+    padding: 0 0.3rem;
+  }
+  .paginate-container {
+    justify-content: flex-end;
+  }
+  .paginate-container p {
+    display: none;
+  }
+  .paginate-container {
+    margin-bottom: 2rem;
+  }
+}
+footer {
+  padding-top: 0;
 }

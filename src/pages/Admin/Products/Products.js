@@ -5,7 +5,7 @@ import NavBar from "../../../components/NavBar/NavBar";
 import Footer from "../../../components/Footer/Footer";
 import styles from "./Products.module.css";
 import withSearchParams from "../../../helpers/withSearchParams";
-import { createSearchParams, useLocation } from "react-router-dom";
+import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { getProductsAction } from "../../../redux/actions/products";
 import { connect } from "react-redux";
 
@@ -17,8 +17,9 @@ const useQuery = () => {
 
 const Products = ({ setSearchParams, dispatch, product }) => {
   const getQuery = useQuery();
-  // const [product, setProduct] = useState([]);
+  const navigate = useNavigate();
   const [totalPage, setTotalPage] = useState(null);
+  const [isActive, setIsActive] = useState(false);
   const [query, setQuery] = useState({
     search: getQuery.get("search") ? getQuery.get("search") : "",
     // categories: getQuery.get("categories") ? getQuery.get("categories") : "",
@@ -43,6 +44,7 @@ const Products = ({ setSearchParams, dispatch, product }) => {
         .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
     );
   };
+  const handleDropdown = () => setIsActive(!isActive);
 
   return (
     <Fragment>
@@ -89,6 +91,12 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                   <li>Make member card to apply coupon</li>
                 </ol>
               </div>
+              <button
+                onClick={() => navigate("/add-promo")}
+                className={styles["add-promo"]}
+              >
+                Add Promo
+              </button>
             </div>
           </section>
           <section className={`col-12 col-md-8 ${styles["products-section"]}`}>
@@ -149,6 +157,76 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                   Add-on
                 </li>
               </ul>
+
+              <div className={styles["dropdown-container"]}>
+                <div className={`${styles["dropdown"]} `}>
+                  <div
+                    className={`${styles["dropdown-btn"]} ${
+                      styles[isActive ? "active" : ""]
+                    }`}
+                    onClick={handleDropdown}
+                  >
+                    <h2>Sort by</h2>
+                    <span>&#9660;</span>
+                  </div>
+                  {isActive && (
+                    <div className={styles["dropdown-content"]}>
+                      <div className={styles["dropdown-item"]}>
+                        <p
+                          onClick={() => {
+                            setQuery({
+                              ...query,
+                              sort: "newest",
+                            });
+                          }}
+                        >
+                          newest
+                        </p>
+                      </div>
+                      <div className={styles["dropdown-item"]}>
+                        <p
+                          onClick={() => {
+                            setQuery({
+                              ...query,
+                              sort: "oldest",
+                            });
+                            handleDropdown();
+                          }}
+                        >
+                          oldest
+                        </p>
+                      </div>
+                      <div className={styles["dropdown-item"]}>
+                        <p
+                          onClick={() => {
+                            setQuery({
+                              ...query,
+                              sort: "priciest",
+                            });
+                            handleDropdown();
+                          }}
+                        >
+                          priciest
+                        </p>
+                      </div>
+                      <div className={styles["dropdown-item"]}>
+                        <p
+                          onClick={() => {
+                            setQuery({
+                              ...query,
+                              sort: "cheapest",
+                            });
+                            handleDropdown();
+                          }}
+                        >
+                          cheapest
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div className={styles["product-list-container"]}>
                 {product.product.map((e) => (
                   <ProductCard
@@ -184,6 +262,12 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                   </button>
                 </div>
               </div>
+              <button
+                onClick={() => navigate("/add-product")}
+                className={styles["add-product"]}
+              >
+                Add new product
+              </button>
             </div>
           </section>
         </div>

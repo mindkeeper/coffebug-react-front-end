@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import NavBar from "../../components/NavBar/NavBar";
 import styles from "./Profile.module.css";
@@ -83,7 +83,7 @@ const Profile = ({ navigate }) => {
     }
   };
 
-  useState(() => {
+  useEffect(() => {
     dispatch(getProfileActions());
   }, [handleChanges]);
   console.log(body);

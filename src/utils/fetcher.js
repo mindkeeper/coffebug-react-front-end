@@ -30,6 +30,15 @@ export const postData = (token, data) => {
     headers: { "x-access-token": token },
   });
 };
+
+export const postPromo = (token, data) => {
+  return axios({
+    method: "POST",
+    url: `${baseUrl}/promos`,
+    data,
+    headers: { "x-access-token": token },
+  });
+};
 export const logout = (token) => {
   return axios({
     method: "DELETE",

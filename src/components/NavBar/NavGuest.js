@@ -3,7 +3,7 @@ import styles from "./NavBar.module.css";
 
 const GuestNav = ({ navigate }) => {
   return (
-    <section className={`${styles["button-container"]} col-6 col-md-3`}>
+    <section className={`${styles["button-container"]}`}>
       <button
         className={`${styles["btn"]} ${styles["login"]}`}
         onClick={() => {

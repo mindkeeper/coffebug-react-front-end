@@ -36,7 +36,7 @@ const LoginNav = ({ navigate }) => {
   };
   const imageIcon = `${profile.image}`;
   return (
-    <section className={`${styles["button-container"]} col-6 col-md-3`}>
+    <section className={`${styles["button-container"]}`}>
       <form onSubmit={getSearch}>
         <input
           type="text"

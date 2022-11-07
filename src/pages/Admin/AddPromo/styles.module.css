@@ -46,10 +46,16 @@ input::-webkit-inner-spin-button {
   background: rgba(186, 186, 186, 0.35);
   aspect-ratio: 1;
   border-radius: 50%;
+  cursor: pointer;
 }
-.image-container img {
+.image-dummy {
   width: 5.75rem;
-  height: 5.75rem;
+  aspect-ratio: 1;
+}
+.image-preview {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
 }
 .btn {
   width: 100%;
@@ -85,6 +91,15 @@ input::-webkit-inner-spin-button {
   padding: 1rem 2rem;
   border-radius: 1rem;
 }
+.btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 80%;
+}
+.none {
+  display: none;
+}
 
 .contentinput[type="number"] {
   -moz-appearance: textfield;
@@ -105,12 +120,7 @@ input::-webkit-inner-spin-button {
     gap: 1rem;
   }
 }
-.btn-container {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 1.5rem;
-  width: 80%;
-}
+
 @media screen and (max-width: 768px) {
   .main-section {
     flex-direction: column;

@@ -62,11 +62,19 @@ const router = Router([
   },
   {
     path: "/add-product",
-    element: <AddProduct />,
+    element: (
+      <PrivateElement allowedRoles={["Admin"]}>
+        <AddProduct />
+      </PrivateElement>
+    ),
   },
   {
     path: "/add-promo",
-    element: <AddPromo />,
+    element: (
+      <PrivateElement allowedRoles={["Admin"]}>
+        <AddPromo />
+      </PrivateElement>
+    ),
   },
   {
     path: "/test",
@@ -75,7 +83,11 @@ const router = Router([
 
   {
     path: "/admin/products",
-    element: <ProductsAdmin />,
+    element: (
+      <PrivateElement allowedRoles={["Admin"]}>
+        <ProductsAdmin />
+      </PrivateElement>
+    ),
   },
 ]);
 
