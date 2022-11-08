@@ -85,7 +85,7 @@ const Profile = ({ navigate }) => {
 
   useEffect(() => {
     dispatch(getProfileActions());
-  }, [handleChanges]);
+  }, []);
   console.log(body);
   return (
     <Fragment>
