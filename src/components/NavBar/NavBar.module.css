@@ -405,6 +405,16 @@ section .right-bar .input .btn-sign:active {
   .navbar section .searching img {
     display: none;
   }
+  .navbar ol li {
+    width: 100%;
+    text-align: center;
+  }
+  .navbar ol li:hover {
+    width: 100%;
+    text-align: center;
+    background: #6a4029;
+    color: white;
+  }
 }
 
 @media screen and (max-width: 568px) {

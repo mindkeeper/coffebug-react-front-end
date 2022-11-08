@@ -4,7 +4,7 @@ const HistoryCard = ({ productName, price, status, image }) => {
   return (
     <div className={`${styles["card-history"]}`}>
       <div className={`${styles["img-container"]}`}>
-        <img src={`http://localhost:8080/${image}`} alt="" />
+        <img src={`${image}`} alt="" />
       </div>
       <div className={`${styles["history-detail"]}`}>
         <p className={styles["product-name"]}>{productName}</p>

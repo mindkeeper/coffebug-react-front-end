@@ -7,7 +7,8 @@ import styles from "./Products.module.css";
 import withSearchParams from "../../helpers/withSearchParams";
 import { createSearchParams, useLocation } from "react-router-dom";
 import { getProductsAction } from "../../redux/actions/products";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
+import { getPromosAction } from "../../redux/actions/getPromos";
 
 const useQuery = () => {
   const { search } = useLocation();
@@ -16,6 +17,7 @@ const useQuery = () => {
 };
 
 const Products = ({ setSearchParams, dispatch, product }) => {
+  const promos = useSelector((state) => state.getPromos.promos);
   const getQuery = useQuery();
   // const [product, setProduct] = useState([]);
   const [totalPage, setTotalPage] = useState(null);
@@ -33,9 +35,10 @@ const Products = ({ setSearchParams, dispatch, product }) => {
     const urlSearchParams = createSearchParams({ ...query });
     setSearchParams(urlSearchParams);
     dispatch(getProductsAction(query));
+    dispatch(getPromosAction());
     setTotalPage(product.meta.totalPage);
   }, [dispatch, product.meta.totalPage, query, setSearchParams]);
-
+  console.log(promos);
   const currency = (price) => {
     return (
       "IDR " +
@@ -67,6 +70,11 @@ const Products = ({ setSearchParams, dispatch, product }) => {
               </div>
               <div className="container row justify-content-center">
                 <ul className={styles["list-promos"]}>
+                  {/* {promos?.map((e) => {
+                    <li>
+                      <PromoCard image={e.image} promoName={e.promo_name} desc={e.description} />
+                    </li>;
+                  })} */}
                   <li>
                     <PromoCard />
                   </li>
@@ -104,7 +112,7 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                     });
                   }}
                 >
-                  Favorite & Promo
+                  Favorites
                 </li>
                 <li
                   onClick={() => {

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import NavBar from "../../components/NavBar/NavBar";
 import styles from "./DetailsProduct.module.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import arrow from "../../assets/img/arrow.png";
 import { getData } from "../../utils/fetcher";
 const DetailsProduct = () => {
@@ -10,7 +10,7 @@ const DetailsProduct = () => {
   const [count, setCount] = useState(0);
   const [size, setSize] = useState("Regular");
   const { id } = useParams();
-
+  const role = JSON.parse(localStorage.getItem("userInfo")).role || "";
   const fetchData = async () => {
     try {
       const res = await getData(`/products/${id}`);
@@ -19,6 +19,7 @@ const DetailsProduct = () => {
       console.log(error);
     }
   };
+  const navigate = useNavigate();
   useEffect(() => {
     fetchData();
   }, []);
@@ -60,7 +61,7 @@ const DetailsProduct = () => {
           <section className={`col-12 ${styles["details-container"]}`}>
             <aside className={styles["side-container"]}>
               <img
-                src={`http://localhost:8080/${product.image}`}
+                src={`${product.image}`}
                 alt=""
                 className={styles["product-image"]}
               />
@@ -134,9 +135,22 @@ const DetailsProduct = () => {
                 <button className={`${styles["btn"]} ${styles["add-to-cart"]}`}>
                   Add to cart
                 </button>
-                <button className={`${styles["btn"]} ${styles["ask-a-staff"]}`}>
-                  Ask a staff
-                </button>
+                {role !== "Admin" ? (
+                  <button
+                    className={`${styles["btn"]} ${styles["ask-a-staff"]}`}
+                  >
+                    Ask a staff
+                  </button>
+                ) : (
+                  <button
+                    className={`${styles["btn"]} ${styles["ask-a-staff"]}`}
+                    onClick={() => {
+                      navigate(`/admin/edit-product/${id}`);
+                    }}
+                  >
+                    Edit Product
+                  </button>
+                )}
               </div>
             </aside>
           </section>
@@ -177,7 +191,7 @@ const DetailsProduct = () => {
             <div className={`col-12 col-md-8 ${styles["check-out"]}`}>
               <div className={styles["checkout-left"]}>
                 <img
-                  src={`http://localhost:8080/${product.image}`}
+                  src={`${product.image}`}
                   alt=""
                   className={`${styles["selected-item"]}`}
                 />

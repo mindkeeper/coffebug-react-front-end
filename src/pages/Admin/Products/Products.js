@@ -110,7 +110,7 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                     });
                   }}
                 >
-                  Favorite & Promo
+                  Favorites
                 </li>
                 <li
                   onClick={() => {

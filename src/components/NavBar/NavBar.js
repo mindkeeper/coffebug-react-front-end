@@ -40,14 +40,18 @@ const NavBar = ({ navigate }) => {
     setSearch(event.target.value);
   };
   const getSearch = () => {
-    return navigate(`/product?search=${search}`);
+    return navigate(
+      role !== "Admin"
+        ? `/products?search=${search}`
+        : `/admin/products?search=${search}`
+    );
   };
 
   const getDataProfile = async () => {
     try {
       const result = await getProfile();
       // console.log(result.data.result[0]);
-      setProfile(result.data.result[0]);
+      setProfile(result.data.data[0]);
       console.log(result);
     } catch (error) {
       // console.log(error);
@@ -99,17 +103,17 @@ const NavBar = ({ navigate }) => {
           </li>
           <li
             onClick={() => {
-              navigate("/payment");
+              navigate(role === "Admin" ? "/orders" : "/payment");
             }}
           >
-            Your Cart
+            {role === "Admin" ? "Orders" : "Your Cart"}
           </li>
           <li
             onClick={() => {
-              navigate("/history");
+              navigate(role === "Admin" ? "/dashboard" : "/history");
             }}
           >
-            History
+            {role === "Admin" ? "Dashboard" : "History"}
           </li>
         </ol>
       </div>
@@ -136,7 +140,7 @@ const NavBar = ({ navigate }) => {
               navigate("/profile");
             }}
           >
-            <img src={`${profile.image}`} alt="profile" />
+            <img src={profile.image ?? avatar} alt="profile" />
           </div>
         </section>
       ) : (

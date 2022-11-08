@@ -15,6 +15,7 @@ import AddPromo from "../pages/Admin/AddPromo";
 import PrivateElement from "../components/PrivateElement";
 import ProductsAdmin from "../pages/Admin/Products/Products";
 import EditProduct from "../pages/Admin/EditProduct";
+import Dashboard from "../pages/Admin/Dashboard";
 
 const router = Router([
   {
@@ -59,7 +60,11 @@ const router = Router([
   },
   {
     path: "/payment",
-    element: <Payment />,
+    element: (
+      <PrivateElement allowedRoles={["User"]}>
+        <Payment />
+      </PrivateElement>
+    ),
   },
   {
     path: "/add-product",
@@ -95,6 +100,14 @@ const router = Router([
     element: (
       <PrivateElement allowedRoles={["Admin"]}>
         <EditProduct />
+      </PrivateElement>
+    ),
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateElement allowedRoles={["Admin"]}>
+        <Dashboard />
       </PrivateElement>
     ),
   },

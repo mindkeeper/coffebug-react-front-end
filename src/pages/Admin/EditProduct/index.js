@@ -62,7 +62,14 @@ const EditProduct = () => {
       console.log(error);
     }
   };
-
+  const currency = (price) => {
+    return (
+      "IDR " +
+      parseFloat(price)
+        .toFixed()
+        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+    );
+  };
   // console.log(token, body);
   useEffect(() => {
     dispatch(getDetailProductAction(id));
@@ -137,7 +144,7 @@ const EditProduct = () => {
               <input
                 onChange={changeHandler}
                 name="price"
-                placeholder={product.price}
+                placeholder={currency(product.price)}
                 type="text"
               />
               <label htmlFor="description">Description:</label>
