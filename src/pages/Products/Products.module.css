@@ -61,6 +61,30 @@ li.button {
   background: #78482e;
   transform: scaleX(1.1);
 }
+.add-promo {
+  background-color: #ffba33;
+  color: #6a4029;
+  width: 78%;
+  padding: 1rem;
+  border-radius: 1.25rem;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  border: none;
+}
+.add-product {
+  border: none;
+  width: 90%;
+  margin: 0 auto;
+  background-color: #6a4029;
+  border-radius: 1rem;
+  color: white;
+  padding: 1rem;
+  font-weight: bold;
+}
+.add-promo:hover {
+  background: #f2c468;
+  transform: scaleX(1.1);
+}
 .terms-text {
   margin: 0;
   font-weight: bold;

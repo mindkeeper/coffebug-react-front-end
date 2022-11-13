@@ -5,10 +5,9 @@ import NavBar from "../../components/NavBar/NavBar";
 import Footer from "../../components/Footer/Footer";
 import styles from "./Products.module.css";
 import withSearchParams from "../../helpers/withSearchParams";
-import { createSearchParams, useLocation } from "react-router-dom";
+import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { getProductsAction } from "../../redux/actions/products";
 import { connect, useSelector } from "react-redux";
-import { getPromosAction } from "../../redux/actions/getPromos";
 
 const useQuery = () => {
   const { search } = useLocation();
@@ -17,9 +16,8 @@ const useQuery = () => {
 };
 
 const Products = ({ setSearchParams, dispatch, product }) => {
-  const promos = useSelector((state) => state.getPromos.promos);
   const getQuery = useQuery();
-  // const [product, setProduct] = useState([]);
+  const navigate = useNavigate();
   const [totalPage, setTotalPage] = useState(null);
   const [isActive, setIsActive] = useState(false);
   const [query, setQuery] = useState({
@@ -30,15 +28,15 @@ const Products = ({ setSearchParams, dispatch, product }) => {
     sort: getQuery.get("sort") ? getQuery.get("sort") : "popular",
     page: getQuery.get("page") ? getQuery.get("page") : 1,
   });
+  const role = JSON.parse(localStorage.getItem("userInfo")).role || "";
 
   useEffect(() => {
     const urlSearchParams = createSearchParams({ ...query });
     setSearchParams(urlSearchParams);
     dispatch(getProductsAction(query));
-    dispatch(getPromosAction());
     setTotalPage(product.meta.totalPage);
   }, [dispatch, product.meta.totalPage, query, setSearchParams]);
-  console.log(promos);
+
   const currency = (price) => {
     return (
       "IDR " +
@@ -70,11 +68,6 @@ const Products = ({ setSearchParams, dispatch, product }) => {
               </div>
               <div className="container row justify-content-center">
                 <ul className={styles["list-promos"]}>
-                  {/* {promos?.map((e) => {
-                    <li>
-                      <PromoCard image={e.image} promoName={e.promo_name} desc={e.description} />
-                    </li>;
-                  })} */}
                   <li>
                     <PromoCard />
                   </li>
@@ -99,6 +92,14 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                   <li>Make member card to apply coupon</li>
                 </ol>
               </div>
+              {role === "Admin" && (
+                <button
+                  onClick={() => navigate("/add-promo")}
+                  className={styles["add-promo"]}
+                >
+                  Add Promo
+                </button>
+              )}
             </div>
           </section>
           <section className={`col-12 col-md-8 ${styles["products-section"]}`}>
@@ -237,7 +238,6 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                     image={e.image}
                     id={e.id}
                     key={e.id}
-                    display={"hidden"}
                   />
                 ))}
               </div>
@@ -265,6 +265,14 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                   </button>
                 </div>
               </div>
+              {role === "Admin" && (
+                <button
+                  onClick={() => navigate("/add-product")}
+                  className={styles["add-product"]}
+                >
+                  Add new product
+                </button>
+              )}
             </div>
           </section>
         </div>
