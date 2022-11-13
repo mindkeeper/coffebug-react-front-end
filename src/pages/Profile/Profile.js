@@ -7,16 +7,17 @@ import iconEdit from "../../assets/img/profile/edit-icon.png";
 import { editProfile } from "../../utils/fetcher";
 import withNavigate from "../../helpers/withNavigate";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutAction } from "../../redux/actions/auths";
 import Toast from "../../components/Toast/Toast";
 import { getProfileActions } from "../../redux/actions/profile";
 import ModalLogout from "../../components/Modals/ModalLogout";
+import Loading from "../../components/Loading";
 
 const Profile = ({ navigate }) => {
   const dispatch = useDispatch();
   const token = JSON.parse(localStorage.getItem("userInfo")).token;
   const refTarget = useRef(null);
   const profile = useSelector((state) => state.profileProps.profile);
+  const isLoading = useSelector((state) => state.profileProps.isLoading);
   const [body, setBody] = useState({});
   const [toastInfo, setToastInfo] = useState({ display: false });
   const [imgPreview, setImgPreview] = useState(null);
@@ -114,11 +115,15 @@ const Profile = ({ navigate }) => {
           <section className={styles["user-info-container"]}>
             <aside className={`${styles["edit"]} ${styles["avatar"]}`}>
               <div className={styles["avatar-container"]}>
-                <img
-                  className={styles["avatar-img"]}
-                  src={imgPreview ? imgPreview : `${profile.image}`}
-                  alt=""
-                />
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  <img
+                    className={styles["avatar-img"]}
+                    src={imgPreview ? imgPreview : `${profile.image}`}
+                    alt=""
+                  />
+                )}
                 <p className={styles["display-name"]}>
                   {profile.display_name || "your name here"}
                 </p>
@@ -263,33 +268,63 @@ const Profile = ({ navigate }) => {
                   <div className={styles["form-container"]}>
                     <div className={styles["form-item"]}>
                       <label htmlFor="name">Display name:</label>
-                      <input
-                        disabled={notEdit}
-                        onChange={changeHandler}
-                        name="display_name"
-                        type="text"
-                        placeholder={profile.display_name || "your name here"}
-                      />
+                      {notEdit ? (
+                        <input
+                          disabled={notEdit}
+                          // onChange={changeHandler}
+                          name="display_name"
+                          type="text"
+                          placeholder={profile.display_name}
+                          value=""
+                        />
+                      ) : (
+                        <input
+                          onChange={changeHandler}
+                          name="display_name"
+                          type="text"
+                          placeholder={profile.display_name}
+                        />
+                      )}
                     </div>
                     <div className={styles["form-item"]}>
                       <label htmlFor="first-name">First name:</label>
-                      <input
-                        disabled={notEdit}
-                        onChange={changeHandler}
-                        name="first_name"
-                        type="text"
-                        placeholder={profile.first_name || "your name here"}
-                      />
+                      {notEdit ? (
+                        <input
+                          disabled={notEdit}
+                          // onChange={changeHandler}
+                          name="first_name"
+                          type="text"
+                          placeholder={profile.first_name}
+                          value=""
+                        />
+                      ) : (
+                        <input
+                          onChange={changeHandler}
+                          name="first_name"
+                          type="text"
+                          placeholder={profile.first_name}
+                        />
+                      )}
                     </div>
                     <div className={styles["form-item"]}>
                       <label htmlFor="last-name">Last name:</label>
-                      <input
-                        disabled={notEdit}
-                        onChange={changeHandler}
-                        name="last_name"
-                        type="text"
-                        placeholder={profile.last_name || "your name here"}
-                      />
+                      {notEdit ? (
+                        <input
+                          disabled={notEdit}
+                          // onChange={changeHandler}
+                          name="last_name"
+                          type="text"
+                          placeholder={profile.last_name}
+                          value=""
+                        />
+                      ) : (
+                        <input
+                          onChange={changeHandler}
+                          name="last_name"
+                          type="text"
+                          placeholder={profile.last_name}
+                        />
+                      )}
                     </div>
                   </div>
                   <div className={styles["form-container"]}>
