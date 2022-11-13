@@ -3,13 +3,14 @@ import Footer from "../../components/Footer/Footer";
 import NavBar from "../../components/NavBar/NavBar";
 import styles from "./Profile.module.css";
 import iconEdit from "../../assets/img/profile/edit-icon.png";
-import avatar from "../../assets/img/profile/profile-dummy.png";
+// import avatar from "../../assets/img/profile/profile-dummy.png";
 import { editProfile } from "../../utils/fetcher";
 import withNavigate from "../../helpers/withNavigate";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../../redux/actions/auths";
 import Toast from "../../components/Toast/Toast";
 import { getProfileActions } from "../../redux/actions/profile";
+import ModalLogout from "../../components/Modals/ModalLogout";
 
 const Profile = ({ navigate }) => {
   const dispatch = useDispatch();
@@ -20,6 +21,14 @@ const Profile = ({ navigate }) => {
   const [toastInfo, setToastInfo] = useState({ display: false });
   const [imgPreview, setImgPreview] = useState(null);
   const [notEdit, setNotEdit] = useState(true);
+  const [open, setOpen] = useState(false);
+  // const [form, setForm] = useState({
+  //   address: "",
+  //   display_name: "",
+  //   first_name: "",
+  //   last_name: "",
+  // });
+  const showModalHandler = () => setOpen(!open);
 
   const onEdit = () => {
     setNotEdit(!notEdit);
@@ -83,10 +92,11 @@ const Profile = ({ navigate }) => {
     }
   };
 
+  // const clearFormHandler = () => setForm({ ...form });
   useEffect(() => {
     dispatch(getProfileActions());
   }, []);
-  console.log(body);
+  // console.log(body);
   return (
     <Fragment>
       <Toast
@@ -176,9 +186,7 @@ const Profile = ({ navigate }) => {
               </div>
               <div
                 onClick={() => {
-                  dispatch(logoutAction(token));
-                  localStorage.removeItem("userInfo");
-                  navigate("/login");
+                  showModalHandler();
                 }}
                 className={styles["btn-container"]}
               >
@@ -214,13 +222,23 @@ const Profile = ({ navigate }) => {
                     </div>
                     <div className={styles["form-item"]}>
                       <label htmlFor="email">Delivery address:</label>
-                      <input
-                        disabled={notEdit}
-                        onChange={changeHandler}
-                        name="address"
-                        type="text"
-                        placeholder={profile.address}
-                      />
+                      {notEdit ? (
+                        <input
+                          disabled={notEdit}
+                          // onChange={changeHandler}
+                          name="address"
+                          type="text"
+                          placeholder={profile.address}
+                          value=""
+                        />
+                      ) : (
+                        <input
+                          onChange={changeHandler}
+                          name="address"
+                          type="text"
+                          placeholder={profile.address}
+                        />
+                      )}
                     </div>
                   </div>
                   <div className={styles["form-container"]}>
@@ -342,6 +360,7 @@ const Profile = ({ navigate }) => {
         </div>
       </main>
       <Footer />
+      <ModalLogout open={open} setOpen={setOpen} />
     </Fragment>
   );
 };
