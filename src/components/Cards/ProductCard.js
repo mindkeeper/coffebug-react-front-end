@@ -1,9 +1,12 @@
 import React, { Fragment } from "react";
 
 import styles from "./styles/ProductCard.module.css";
-import withNavigate from "../../helpers/withNavigate";
 import iconEdit from "../../assets/img/profile/edit-icon.png";
-const ProductCard = ({ navigate, id, productName, price, image, display }) => {
+import { useNavigate } from "react-router-dom";
+const ProductCard = ({ id, productName, price, image, display }) => {
+  const navigate = useNavigate();
+  const role = JSON.parse(localStorage.getItem("userInfo")).role || "";
+  console.log(role);
   return (
     <Fragment>
       <div className={styles["product-card"]}>
@@ -17,17 +20,19 @@ const ProductCard = ({ navigate, id, productName, price, image, display }) => {
         />
         <p className={styles["product-name"]}>{productName}</p>
         <p className={styles["product-price"]}>{price}</p>
-        <div
-          onClick={() => {
-            navigate(`/admin/edit-product/${id}`);
-          }}
-          className={`${styles["edit-icon-container"]} ${styles[display]}`}
-        >
-          <img src={iconEdit} alt="pen" />
-        </div>
+        {role === "Admin" && (
+          <div
+            onClick={() => {
+              navigate(`/admin/edit-product/${id}`);
+            }}
+            className={`${styles["edit-icon-container"]} ${styles[display]}`}
+          >
+            <img src={iconEdit} alt="pen" />
+          </div>
+        )}
       </div>
     </Fragment>
   );
 };
 
-export default withNavigate(ProductCard);
+export default ProductCard;
