@@ -1,7 +1,7 @@
 .container {
   max-width: 30%;
   padding: 2rem;
-  position: absolute;
+  position: fixed;
   border-radius: 1rem;
   margin: 0 auto;
   top: 3rem;
