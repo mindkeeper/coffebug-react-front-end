@@ -7,6 +7,7 @@ import camera from "../../../assets/img/addProduct/camera.png";
 import Toast from "../../../components/Toast/Toast";
 import { useNavigate } from "react-router-dom";
 import { postData } from "../../../utils/fetcher";
+import AddProductModal from "../../../components/Modals/AddProductModal";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const AddProduct = () => {
   const [category, setCategory] = useState("Select Categories");
   const refTarget = useRef(null);
   const token = JSON.parse(localStorage.getItem("userInfo")).token;
-
+  const [open, setOpen] = useState(false);
   const setDropdown = () => setIsActive(!isActive);
   const changeHandler = (e) => {
     setBody({ ...body, [e.target.name]: e.target.value });
@@ -70,7 +71,8 @@ const AddProduct = () => {
       console.log(error);
     }
   };
-  console.log(token, body);
+  const showModalHandler = () => setOpen(!open);
+  console.log(body);
   return (
     <Fragment>
       <Toast
@@ -208,7 +210,7 @@ const AddProduct = () => {
             <div className={styles["btn-container"]}>
               <button
                 onClick={() => {
-                  postProduct();
+                  showModalHandler();
                 }}
                 className={`${styles["btn"]} ${styles["btn-save"]}`}
               >
@@ -222,6 +224,11 @@ const AddProduct = () => {
         </section>
       </main>
       <Footer />
+      <AddProductModal
+        open={open}
+        setOpen={setOpen}
+        postProduct={postProduct}
+      />
     </Fragment>
   );
 };
