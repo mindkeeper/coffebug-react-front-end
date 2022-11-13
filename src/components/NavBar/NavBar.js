@@ -5,10 +5,12 @@ import styles from "./NavBar.module.css";
 import withNavigate from "../../helpers/withNavigate";
 import withLocation from "../../helpers/withLocation";
 import withSearchParams from "../../helpers/withSearchParams";
-import { getProfile } from "../../utils/fetcher";
 import chatLogo from "../../assets/img/nav/chat-logo.png";
 import avatar from "../../assets/img/nav/profile-dummy.png";
 import searchLogo from "../../assets/img/nav/search-logo.png";
+import ModalLogout from "../Modals/ModalLogout";
+import { useDispatch, useSelector } from "react-redux";
+import { getProfileActions } from "../../redux/actions/profile";
 
 const NavBar = ({ navigate }) => {
   const token = JSON.parse(localStorage.getItem("userInfo"))
@@ -17,53 +19,53 @@ const NavBar = ({ navigate }) => {
   const role = JSON.parse(localStorage.getItem("userInfo"))
     ? JSON.parse(localStorage.getItem("userInfo")).role
     : "";
+  const dispatch = useDispatch();
   const [state, setState] = useState("");
   const text = state.text;
   const title = state.title;
-  const [profile, setProfile] = useState({});
+  // const [profile, setProfile] = useState({});
+  const profile = useSelector((state) => state.profileProps.profile);
   const [search, setSearch] = useState(() => "");
-  function slide() {
+  const [open, setOpen] = useState(false);
+  const slide = () => {
     setState((state) => ({
       text:
         state.text === `${styles["slide-bar"]}` ? "" : `${styles["slide-bar"]}`,
     }));
-  }
+  };
 
-  function searchBar() {
+  const searchBar = () => {
     setState((state) => ({
       title: state.title === `${styles.show}` ? "" : `${styles.show}`,
     }));
-  }
+  };
 
   const setValue = (event) => {
     console.log(event);
     setSearch(event.target.value);
   };
-  const getSearch = () => {
-    return navigate(
-      role !== "Admin"
-        ? `/products?search=${search}`
-        : `/admin/products?search=${search}`
-    );
+  const getSearch = (e) => {
+    e.preventDefault();
+    navigate(`/products?search=${search}`);
   };
 
-  const getDataProfile = async () => {
-    try {
-      const result = await getProfile();
-      // console.log(result.data.result[0]);
-      setProfile(result.data.data[0]);
-      console.log(result);
-    } catch (error) {
-      // console.log(error);
-      // console.log(error.response.data.statusCode);
-      if (error.response.data.statusCode === 403) {
-        navigate("/login");
-      }
-    }
-  };
-
+  // const getDataProfile = async () => {
+  //   try {
+  //     const result = await getProfile();
+  //     // console.log(result.data.result[0]);
+  //     setProfile(result.data.data[0]);
+  //     console.log(result);
+  //   } catch (error) {
+  //     // console.log(error);
+  //     // console.log(error.response.data.statusCode);
+  //     if (error.response.data.statusCode === 403) {
+  //       navigate("/login");
+  //     }
+  //   }
+  // };
+  const showModalHandler = () => setOpen(!open);
   useEffect(() => {
-    getDataProfile();
+    dispatch(getProfileActions());
   }, []);
   return (
     <nav className={styles.navbar}>
@@ -96,7 +98,7 @@ const NavBar = ({ navigate }) => {
           </li>
           <li
             onClick={() => {
-              navigate(role !== "Admin" ? "/products" : "/admin/products");
+              navigate("/products");
             }}
           >
             Product
@@ -134,14 +136,23 @@ const NavBar = ({ navigate }) => {
             <div className={styles.notif}>1</div>
             <img src={chatLogo} alt="" />
           </div>
-          <div
-            className={styles.profile}
-            onClick={() => {
-              navigate("/profile");
-            }}
-          >
-            <img src={profile.image ?? avatar} alt="profile" />
-          </div>
+          {(role !== "Admin" && (
+            <div
+              className={styles.profile}
+              onClick={() => {
+                navigate("/profile");
+              }}
+            >
+              <img src={profile.image ?? avatar} alt="profile" />
+            </div>
+          )) || (
+            <button
+              onClick={() => showModalHandler()}
+              className={styles["btn-logout"]}
+            >
+              Logout
+            </button>
+          )}
         </section>
       ) : (
         <section className={text}>
@@ -174,6 +185,7 @@ const NavBar = ({ navigate }) => {
         <span></span>
         <span></span>
       </div>
+      <ModalLogout open={open} setOpen={setOpen} />
     </nav>
   );
 };
