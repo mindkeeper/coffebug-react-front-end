@@ -8,6 +8,7 @@ import withSearchParams from "../../helpers/withSearchParams";
 import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { getProductsAction } from "../../redux/actions/products";
 import { connect, useSelector } from "react-redux";
+import Loading from "../../components/Loading";
 
 const useQuery = () => {
   const { search } = useLocation();
@@ -22,20 +23,19 @@ const Products = ({ setSearchParams, dispatch, product }) => {
   const [isActive, setIsActive] = useState(false);
   const [query, setQuery] = useState({
     search: getQuery.get("search") ? getQuery.get("search") : "",
-    // categories: getQuery.get("categories") ? getQuery.get("categories") : "",
-    // minPrice: getQuery.get("minPrice") ? getQuery.get("minPrice") : 0,
-    // maxPrice: getQuery.get("maxPrice") ? getQuery.get("maxPrice") : 1000000,
     sort: getQuery.get("sort") ? getQuery.get("sort") : "popular",
     page: getQuery.get("page") ? getQuery.get("page") : 1,
   });
   const role = JSON.parse(localStorage.getItem("userInfo")).role || "";
-
+  const isLoading = useSelector((state) => state.product.isLoading);
   useEffect(() => {
     const urlSearchParams = createSearchParams({ ...query });
     setSearchParams(urlSearchParams);
     dispatch(getProductsAction(query));
     setTotalPage(product.meta.totalPage);
   }, [dispatch, product.meta.totalPage, query, setSearchParams]);
+
+  const [selected, setSelected] = useState("favorites");
 
   const currency = (price) => {
     return (
@@ -111,7 +111,12 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                       sort: "popular",
                       page: 1,
                     });
+                    setSelected("favorites");
                   }}
+                  className={
+                    selected === "favorites" &&
+                    `${styles["selected"]} ${styles["categories"]}`
+                  }
                 >
                   Favorites
                 </li>
@@ -121,11 +126,14 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                       categories: "coffee",
                       page: 1,
                     });
-                    const urlSearchParams = createSearchParams({ ...query });
-                    setSearchParams(urlSearchParams);
+                    setSelected("coffee");
                   }}
+                  className={
+                    selected === "coffee" &&
+                    `${styles["selected"]} ${styles["categories"]}`
+                  }
                 >
-                  Coffe
+                  Coffee
                 </li>
                 <li
                   onClick={() => {
@@ -133,9 +141,12 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                       categories: "non-coffee",
                       page: 1,
                     });
-                    const urlSearchParams = createSearchParams({ ...query });
-                    setSearchParams(urlSearchParams);
+                    setSelected("non-coffee");
                   }}
+                  className={
+                    selected === "non-coffee" &&
+                    `${styles["selected"]} ${styles["categories"]}`
+                  }
                 >
                   Non Coffe
                 </li>
@@ -145,7 +156,12 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                       categories: "foods",
                       page: 1,
                     });
+                    setSelected("foods");
                   }}
+                  className={
+                    selected === "foods" &&
+                    `${styles["selected"]} ${styles["categories"]}`
+                  }
                 >
                   Foods
                 </li>
@@ -231,15 +247,21 @@ const Products = ({ setSearchParams, dispatch, product }) => {
               </div>
 
               <div className={styles["product-list-container"]}>
-                {product.product.map((e) => (
-                  <ProductCard
-                    productName={e.product_name}
-                    price={currency(e.price)}
-                    image={e.image}
-                    id={e.id}
-                    key={e.id}
-                  />
-                ))}
+                {isLoading ? (
+                  <div className={styles["loading"]}>
+                    <Loading />
+                  </div>
+                ) : (
+                  product.product.map((e) => (
+                    <ProductCard
+                      productName={e.product_name}
+                      price={currency(e.price)}
+                      image={e.image}
+                      id={e.id}
+                      key={e.id}
+                    />
+                  ))
+                )}
               </div>
               <div className={`${styles["paginate-container"]}`}>
                 <p>{`showing page ${query.page} of ${totalPage}`}</p>

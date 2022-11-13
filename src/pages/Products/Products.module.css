@@ -228,7 +228,18 @@ li.button {
 .active {
   background-color: #ffcb65;
 }
+.loading {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* products end */
+.selected.categories {
+  color: #6a4029;
+  border-bottom: 2px solid #6a4029;
+  font-weight: bold;
+}
 /* main end */
 
 @media screen and (max-width: 768px) {
