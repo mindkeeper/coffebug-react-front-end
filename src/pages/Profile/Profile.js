@@ -12,7 +12,7 @@ import { getProfileActions } from "../../redux/actions/profile";
 import ModalLogout from "../../components/Modals/ModalLogout";
 import Loading from "../../components/Loading";
 
-const Profile = ({ navigate }) => {
+const Profile = () => {
   const dispatch = useDispatch();
   const token = JSON.parse(localStorage.getItem("userInfo")).token;
   const refTarget = useRef(null);
@@ -23,12 +23,14 @@ const Profile = ({ navigate }) => {
   const [imgPreview, setImgPreview] = useState(null);
   const [notEdit, setNotEdit] = useState(true);
   const [open, setOpen] = useState(false);
-  // const [form, setForm] = useState({
-  //   address: "",
-  //   display_name: "",
-  //   first_name: "",
-  //   last_name: "",
-  // });
+
+  const [profileTemp, setProfileTemp] = useState([]);
+  console.log(profileTemp);
+
+  useEffect(() => {
+    setProfileTemp(profile);
+  }, [profile]);
+
   const showModalHandler = () => setOpen(!open);
 
   const onEdit = () => {

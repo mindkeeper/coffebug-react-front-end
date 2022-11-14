@@ -6,6 +6,8 @@ import camera from "../../../assets/img/addProduct/camera.png";
 import { useNavigate } from "react-router-dom";
 import Toast from "../../../components/Toast/Toast";
 import { postPromo } from "../../../utils/fetcher";
+import AddPromoModal from "../../../components/Modals/AddPromoModal";
+import SavePromoModal from "../../../components/Modals/SavePromoModal";
 
 const AddPromo = () => {
   const token = JSON.parse(localStorage.getItem("userInfo")).token || "";
@@ -14,7 +16,11 @@ const AddPromo = () => {
   const [toastInfo, setToastInfo] = useState({ display: false });
   const [body, setBody] = useState({});
   const [imgPrev, setImgPrev] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [response, setResponse] = useState({});
 
+  const showModalHandler = () => setOpen(!open);
   const changeHandler = (e) =>
     setBody({ ...body, [e.target.name]: e.target.value });
 
@@ -64,6 +70,8 @@ const AddPromo = () => {
     try {
       const response = await postPromo(token, formData);
       console.log(response);
+      setResponse({ id: response.data.data.id, msg: response.data.msg });
+      setShowSuccess(!showSuccess);
     } catch (error) {
       console.log(error);
     }
@@ -173,7 +181,7 @@ const AddPromo = () => {
             <div className={styles["btn-container"]}>
               <button
                 onClick={() => {
-                  submitHandler();
+                  showModalHandler();
                 }}
                 className={`${styles["btn"]} ${styles["btn-save"]}`}
               >
@@ -187,6 +195,17 @@ const AddPromo = () => {
         </section>
       </main>
       <Footer />
+      <AddPromoModal
+        open={open}
+        setOpen={setOpen}
+        submitHandler={submitHandler}
+      />
+      <SavePromoModal
+        showSuccess={showSuccess}
+        setShowSuccess={setShowSuccess}
+        msg={response.msg}
+        id={response.id}
+      />
     </Fragment>
   );
 };

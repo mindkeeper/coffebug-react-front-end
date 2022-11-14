@@ -12,7 +12,7 @@ const ProductCard = ({ id, productName, price, image, display }) => {
       <div className={styles["product-card"]}>
         <img
           onClick={() => {
-            navigate(`/products/${id}`);
+            navigate(`/product/${id}`);
           }}
           src={`${image}`}
           alt=""
@@ -23,7 +23,7 @@ const ProductCard = ({ id, productName, price, image, display }) => {
         {role === "Admin" && (
           <div
             onClick={() => {
-              navigate(`/admin/edit-product/${id}`);
+              navigate(`/product/${id}/edit`);
             }}
             className={`${styles["edit-icon-container"]} ${styles[display]}`}
           >

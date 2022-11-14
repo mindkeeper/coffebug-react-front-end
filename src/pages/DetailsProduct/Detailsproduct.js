@@ -145,7 +145,7 @@ const DetailsProduct = () => {
                   <button
                     className={`${styles["btn"]} ${styles["ask-a-staff"]}`}
                     onClick={() => {
-                      navigate(`/admin/edit-product/${id}`);
+                      navigate(`/product/${id}/edit`);
                     }}
                   >
                     Edit Product

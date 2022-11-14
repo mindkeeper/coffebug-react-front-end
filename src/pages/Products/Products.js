@@ -49,7 +49,7 @@ const Products = ({ setSearchParams, dispatch, product }) => {
 
   return (
     <Fragment>
-      <NavBar />
+      <NavBar searchValue={(e) => setQuery({ search: e })} />
       <main>
         <div className={`row ${styles["main"]}`}>
           <section className={`col-12 col-md-4 ${styles["promo-section"]}`}>
@@ -94,7 +94,7 @@ const Products = ({ setSearchParams, dispatch, product }) => {
               </div>
               {role === "Admin" && (
                 <button
-                  onClick={() => navigate("/add-promo")}
+                  onClick={() => navigate("/promos/new")}
                   className={styles["add-promo"]}
                 >
                   Add Promo
@@ -289,7 +289,7 @@ const Products = ({ setSearchParams, dispatch, product }) => {
               </div>
               {role === "Admin" && (
                 <button
-                  onClick={() => navigate("/add-product")}
+                  onClick={() => navigate("/product/new")}
                   className={styles["add-product"]}
                 >
                   Add new product

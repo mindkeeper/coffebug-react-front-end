@@ -13,9 +13,9 @@ import TestPage from "../pages/Test Page/Test";
 import AddProduct from "../pages/Admin/AddProducts";
 import AddPromo from "../pages/Admin/AddPromo";
 import PrivateElement from "../components/PrivateElement";
-import ProductsAdmin from "../pages/Admin/Products/Products";
 import EditProduct from "../pages/Admin/EditProduct";
 import Dashboard from "../pages/Admin/Dashboard";
+import SaveProductModal from "../components/Modals/SaveProductModal";
 
 const router = Router([
   {
@@ -43,7 +43,7 @@ const router = Router([
     ),
   },
   {
-    path: "/products/:id",
+    path: "/product/:id",
     element: <DetailsProduct />,
   },
   {
@@ -67,7 +67,7 @@ const router = Router([
     ),
   },
   {
-    path: "/add-product",
+    path: "/product/new",
     element: (
       <PrivateElement allowedRoles={["Admin"]}>
         <AddProduct />
@@ -75,7 +75,7 @@ const router = Router([
     ),
   },
   {
-    path: "/add-promo",
+    path: "/promos/new",
     element: (
       <PrivateElement allowedRoles={["Admin"]}>
         <AddPromo />
@@ -88,15 +88,7 @@ const router = Router([
   },
 
   {
-    path: "/admin/products",
-    element: (
-      <PrivateElement allowedRoles={["Admin"]}>
-        <ProductsAdmin />
-      </PrivateElement>
-    ),
-  },
-  {
-    path: "/admin/edit-product/:id",
+    path: "/product/:id/edit",
     element: (
       <PrivateElement allowedRoles={["Admin"]}>
         <EditProduct />
@@ -110,6 +102,10 @@ const router = Router([
         <Dashboard />
       </PrivateElement>
     ),
+  },
+  {
+    path: "/modal",
+    element: <SaveProductModal />,
   },
 ]);
 

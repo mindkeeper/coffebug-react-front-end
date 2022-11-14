@@ -8,6 +8,7 @@ import Toast from "../../../components/Toast/Toast";
 import { useNavigate } from "react-router-dom";
 import { postData } from "../../../utils/fetcher";
 import AddProductModal from "../../../components/Modals/AddProductModal";
+import SaveProductModal from "../../../components/Modals/SaveProductModal";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const AddProduct = () => {
   const refTarget = useRef(null);
   const token = JSON.parse(localStorage.getItem("userInfo")).token;
   const [open, setOpen] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [response, setResponse] = useState({});
   const setDropdown = () => setIsActive(!isActive);
   const changeHandler = (e) => {
     setBody({ ...body, [e.target.name]: e.target.value });
@@ -67,6 +70,11 @@ const AddProduct = () => {
     try {
       const response = await postData(token, formData);
       console.log(response);
+      setShowSuccess(!showSuccess);
+      setResponse({
+        id: response.data.data.id,
+        productName: response.data.data.product_name,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -228,6 +236,12 @@ const AddProduct = () => {
         open={open}
         setOpen={setOpen}
         postProduct={postProduct}
+      />
+      <SaveProductModal
+        showSuccess={showSuccess}
+        id={response.id}
+        productName={response.productName}
+        setShowSuccess={setShowSuccess}
       />
     </Fragment>
   );
