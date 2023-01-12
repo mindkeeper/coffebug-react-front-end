@@ -94,7 +94,7 @@ You may also see any lint errors in the console.
 
 ## Deployment
 
-[Vercel deploy link](https://coffebug-react-front-end.vercel.app/)
+[Vercel deploy link](https://coffebug-online.vercel.app/)
 
 ## Screenshots
 
