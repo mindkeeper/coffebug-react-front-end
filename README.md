@@ -14,12 +14,12 @@ Coffebug is a web application that sells foods, coffee, and beverage. with this 
 
 ## Contents
 
-- [Features](## features)
-- [Run Application](## how-to-run-the-application)
-- [Deployment](## deployment)
-- [Screenshots](## screenshots)
-- [Related Projects](## related-projects)
-- [Authors](## authors)
+- [Features](##features)
+- [Run Application](##how-to-run-the-application)
+- [Deployment](##deployment)
+- [Screenshots](##screenshots)
+- [Related Projects](##related-projects)
+- [Authors](##authors)
 
 ## Features
 
