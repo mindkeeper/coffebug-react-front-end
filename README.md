@@ -108,7 +108,8 @@ You may also see any lint errors in the console.
 </div>
 ## Related Projects
 
-[Related Projects link](https://https://github.com/mindkeeper/coffebug)
+[Coffebug Backend](https://https://github.com/mindkeeper/coffebug)
+[Coffebug Mobile](https://github.com/mindkeeper/coffebug-react-native)
 
 ## Authors
 
