@@ -98,7 +98,7 @@ You may also see any lint errors in the console.
 
 ## Screenshots
 
-<div align="center">
+<div align="center" style="display:flex">
     <img width="250" src="public/images/hero.png">   
     <img width="250" src="public/images/products.png">
     <img width="250" src="public/images/cart.png">
