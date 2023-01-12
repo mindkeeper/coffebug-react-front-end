@@ -1,18 +1,23 @@
-import { Fragment } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logoutAction } from "../../../redux/actions/auths";
+import authsActions from "../../../redux/actions/auths";
 import styles from "./styles.module.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { clearState } from "../../../utils/clearState";
 
 const ModalLogout = ({ setOpen, open }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const token = useSelector((state) => state.auths.userData.token);
   const handleLogout = () => {
-    const token = JSON.parse(localStorage.getItem("userInfo")).token || "";
-    dispatch(logoutAction(token));
-    localStorage.removeItem("userInfo");
-    navigate("/login");
+    const logoutSuccess = () => {
+      clearState(dispatch);
+      toast.success("Logout Success!");
+      navigate("/login");
+    };
+    dispatch(authsActions.logoutThunk(token, logoutSuccess));
   };
 
   return (

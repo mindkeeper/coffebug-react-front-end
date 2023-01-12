@@ -6,7 +6,7 @@ import Footer from "../../components/Footer/Footer";
 import styles from "./Products.module.css";
 import withSearchParams from "../../helpers/withSearchParams";
 import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
-import { getProductsAction } from "../../redux/actions/products";
+import productActions from "../../redux/actions/products";
 import { connect, useSelector } from "react-redux";
 import Loading from "../../components/Loading";
 
@@ -16,24 +16,25 @@ const useQuery = () => {
   return useMemo(() => new URLSearchParams(search), [search]);
 };
 
-const Products = ({ setSearchParams, dispatch, product }) => {
+const Products = ({ setSearchParams, dispatch }) => {
   const getQuery = useQuery();
   const navigate = useNavigate();
-  const [totalPage, setTotalPage] = useState(null);
+  const pagination = useSelector((state) => state.products.pagination);
+  const products = useSelector((state) => state.products.products);
+  const role = useSelector((state) => state.auths.userData.role);
+  const isLoading = useSelector((state) => state.products.isLoading);
   const [isActive, setIsActive] = useState(false);
   const [query, setQuery] = useState({
     search: getQuery.get("search") ? getQuery.get("search") : "",
     sort: getQuery.get("sort") ? getQuery.get("sort") : "popular",
     page: getQuery.get("page") ? getQuery.get("page") : 1,
   });
-  const role = JSON.parse(localStorage.getItem("userInfo")).role || "";
-  const isLoading = useSelector((state) => state.product.isLoading);
+
   useEffect(() => {
     const urlSearchParams = createSearchParams({ ...query });
     setSearchParams(urlSearchParams);
-    dispatch(getProductsAction(query));
-    setTotalPage(product.meta.totalPage);
-  }, [dispatch, product.meta.totalPage, query, setSearchParams]);
+    dispatch(productActions.getProductsThunk(query));
+  }, [dispatch, query, setSearchParams]);
 
   const [selected, setSelected] = useState("favorites");
 
@@ -247,24 +248,25 @@ const Products = ({ setSearchParams, dispatch, product }) => {
               </div>
 
               <div className={styles["product-list-container"]}>
-                {isLoading ? (
-                  <div className={styles["loading"]}>
-                    <Loading />
-                  </div>
-                ) : (
-                  product.product.map((e) => (
-                    <ProductCard
-                      productName={e.product_name}
-                      price={currency(e.price)}
-                      image={e.image}
-                      id={e.id}
-                      key={e.id}
-                    />
-                  ))
-                )}
+                {isLoading
+                  ? Array.from(Array(8).keys()).map((e) => {
+                      return <ProductCard key={e} isLoading={isLoading} />;
+                    })
+                  : products.length > 0 &&
+                    products.map((item) => {
+                      return (
+                        <ProductCard
+                          productName={item.product_name}
+                          price={currency(item.price)}
+                          image={item.image}
+                          id={item.id}
+                          key={item.id}
+                        />
+                      );
+                    })}
               </div>
               <div className={`${styles["paginate-container"]}`}>
-                <p>{`showing page ${query.page} of ${totalPage}`}</p>
+                <p>{`showing page ${query.page} of ${pagination?.totalPage}`}</p>
 
                 <div className={styles["btn-paginate"]}>
                   <button
@@ -280,7 +282,9 @@ const Products = ({ setSearchParams, dispatch, product }) => {
                     onClick={() => {
                       setQuery({ ...query, page: query.page + 1 });
                     }}
-                    disabled={query.page === totalPage ? true : false}
+                    disabled={
+                      query.page === pagination?.totalPage ? true : false
+                    }
                     className={`${styles["btn-next"]}`}
                   >
                     next

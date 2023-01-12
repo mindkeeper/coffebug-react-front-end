@@ -3,33 +3,26 @@ import Footer from "../../components/Footer/Footer";
 import NavBar from "../../components/NavBar/NavBar";
 import styles from "./Profile.module.css";
 import iconEdit from "../../assets/img/profile/edit-icon.png";
-// import avatar from "../../assets/img/profile/profile-dummy.png";
-import { editProfile } from "../../utils/fetcher";
+import avatar from "../../assets/img/profile/profile-dummy.png";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import withNavigate from "../../helpers/withNavigate";
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "../../components/Toast/Toast";
-import { getProfileActions } from "../../redux/actions/profile";
+import userActions from "../../redux/actions/profile";
 import ModalLogout from "../../components/Modals/ModalLogout";
 import Loading from "../../components/Loading";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const token = JSON.parse(localStorage.getItem("userInfo")).token;
+  const token = useSelector((state) => state.auths.userData.token);
   const refTarget = useRef(null);
-  const profile = useSelector((state) => state.profileProps.profile);
-  const isLoading = useSelector((state) => state.profileProps.isLoading);
+  const profile = useSelector((state) => state.users.profile);
+  const isLoading = useSelector((state) => state.users.isLoading);
   const [body, setBody] = useState({});
-  const [toastInfo, setToastInfo] = useState({ display: false });
   const [imgPreview, setImgPreview] = useState(null);
   const [notEdit, setNotEdit] = useState(true);
   const [open, setOpen] = useState(false);
-
-  const [profileTemp, setProfileTemp] = useState([]);
-  console.log(profileTemp);
-
-  useEffect(() => {
-    setProfileTemp(profile);
-  }, [profile]);
 
   const showModalHandler = () => setOpen(!open);
 
@@ -60,56 +53,32 @@ const Profile = () => {
       photo.type !== "image/jpg" &&
       photo.type !== "image/png"
     )
-      return setToastInfo({
-        display: true,
-        status: "error",
-        message: "Extension file wrong! Only .jpeg, .jpg, .png are allowed.",
-      });
+      return toast.error(
+        "Extension file wrong! Only .jpeg, .jpg, .png are allowed."
+      );
 
     if (photo.size > defaultSize)
-      return setToastInfo({
-        display: true,
-        status: "error",
-        message: "File to large. Max. file size 2 Mb",
-      });
+      return toast.error("File to large. Max. file size 2 Mb");
     setBody({ ...body, image: photo });
     setImgPreview(URL.createObjectURL(photo));
   };
-  const handleChanges = async (body) => {
+  const handleChanges = (body) => {
     const formData = new FormData();
     Object.keys(body).forEach((e) => {
       formData.append(e, body[e]);
     });
     console.log(formData);
-    try {
-      await editProfile(formData, token);
-      dispatch(getProfileActions());
-      onEdit();
-      setToastInfo({
-        display: true,
-        status: "success",
-        message: "Update Profile Success",
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    const editSuccess = () => {
+      toast.success("Edit Profile Success");
+    };
+    const editFailed = (err) => toast.error(`${err}`);
+    dispatch(
+      userActions.editProfileThunk(formData, token, editSuccess, editFailed)
+    );
   };
 
-  // const clearFormHandler = () => setForm({ ...form });
-  useEffect(() => {
-    dispatch(getProfileActions());
-  }, []);
-  // console.log(body);
   return (
     <Fragment>
-      <Toast
-        status={toastInfo.status}
-        message={toastInfo.message}
-        display={!toastInfo.display ? "none" : "flex"}
-        changeState={(value) => {
-          setToastInfo({ display: value });
-        }}
-      />
       <NavBar />
       <main className={styles["main-container"]}>
         <div className={styles["container"]}>

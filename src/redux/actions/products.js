@@ -1,22 +1,74 @@
-import { getData, postData } from "../../utils/fetcher";
 import { ACTION_STRING } from "./actionStrings";
+import {
+  getProducts as apiGetProducts,
+  getProductDetail,
+} from "../../utils/fetcher";
+const {
+  getProducts,
+  getDetailProduct,
+  updateProducts,
+  createProduct,
+  pending,
+  rejected,
+  fulfilled,
+} = ACTION_STRING;
 
-export const getProductsAction = (params) => {
-  return {
-    type: ACTION_STRING.getProducts,
-    payload: getData("/products", params),
-  };
+const getProductsPending = () => ({
+  type: getProducts.concat(pending),
+});
+
+const getProductsRejected = (error) => ({
+  type: getProducts.concat(rejected),
+  payload: { error },
+});
+
+const getProductsFulfilled = (data) => ({
+  type: getProducts.concat(fulfilled),
+  payload: { data },
+});
+
+const getDetailProductPending = () => ({
+  type: getDetailProduct.concat(pending),
+});
+
+const getDetailProductRejected = (error) => ({
+  type: getDetailProduct.concat(rejected),
+  payload: { error },
+});
+
+const getDetailProductFulfilled = (data) => ({
+  type: getDetailProduct.concat(fulfilled),
+  payload: { data },
+});
+
+const getProductsThunk = (query, cbSuccess, cbDenied) => async (dispatch) => {
+  try {
+    dispatch(getProductsPending());
+    const result = await apiGetProducts(query);
+    dispatch(getProductsFulfilled(result.data));
+    typeof cbSuccess === "function" && cbSuccess();
+  } catch (error) {
+    console.log(error);
+    dispatch(getProductsRejected(error));
+    typeof cbDenied === "function" && cbDenied();
+  }
 };
 
-export const updateProductAction = (id) => {
-  return {
-    type: ACTION_STRING.updateProducts,
-  };
+const getDetailProductThunk = (id, cbSuccess, cbDenied) => async (dispatch) => {
+  try {
+    dispatch(getDetailProductPending());
+    const result = await getProductDetail(id);
+    dispatch(getDetailProductFulfilled(result.data));
+    typeof cbSuccess === "function" && cbSuccess();
+  } catch (error) {
+    console.log(error);
+    dispatch(getDetailProductRejected(error));
+    typeof cbDenied === "function" && cbDenied();
+  }
 };
 
-export const addProductActions = (token, body) => {
-  return {
-    type: ACTION_STRING.createProduct,
-    payload: postData(token, body),
-  };
+const productActions = {
+  getProductsThunk,
+  getDetailProductThunk,
 };
+export default productActions;

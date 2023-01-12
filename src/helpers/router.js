@@ -16,6 +16,7 @@ import PrivateElement from "../components/PrivateElement";
 import EditProduct from "../pages/Admin/EditProduct";
 import Dashboard from "../pages/Admin/Dashboard";
 import SaveProductModal from "../components/Modals/SaveProductModal";
+import Cart from "../components/Cards/Cart";
 
 const router = Router([
   {
@@ -106,6 +107,10 @@ const router = Router([
   {
     path: "/modal",
     element: <SaveProductModal />,
+  },
+  {
+    path: "/cart",
+    element: <Cart />,
   },
 ]);
 

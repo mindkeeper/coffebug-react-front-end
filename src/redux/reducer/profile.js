@@ -2,16 +2,16 @@ import { ActionType } from "redux-promise-middleware";
 import { ACTION_STRING } from "../actions/actionStrings";
 
 const initialState = {
-  profile: [],
+  profile: {},
   isError: false,
   isLoading: false,
   error: null,
 };
 
-export const profileReducer = (prevState = initialState, action) => {
-  const { getProfile } = ACTION_STRING;
+export const profileReducer = (prevState = initialState, { type, payload }) => {
+  const { getProfile, updateProfile, resetProfile } = ACTION_STRING;
   const { Pending, Rejected, Fulfilled } = ActionType;
-  switch (action.type) {
+  switch (type) {
     case getProfile.concat("_", Pending):
       return {
         ...prevState,
@@ -19,21 +19,44 @@ export const profileReducer = (prevState = initialState, action) => {
         isLoading: true,
       };
     case getProfile.concat("_", Rejected):
-      const getProfileError = action.payload.response.data.msg;
       return {
         ...prevState,
         isError: true,
         isLoading: false,
-        error: getProfileError,
+        error: payload.response.data.msg,
       };
     case getProfile.concat("_", Fulfilled):
-      const getSuccess = action.payload.data.data[0];
       return {
         ...prevState,
         isError: true,
         isLoading: false,
-        profile: getSuccess,
+        profile: payload.data.data,
       };
+
+    case updateProfile.concat("_", Pending):
+      return {
+        ...prevState,
+        isError: false,
+        isLoading: true,
+      };
+    case updateProfile.concat("_", Rejected):
+      return {
+        ...prevState,
+        isError: true,
+        isLoading: false,
+        error: payload.response.data.msg,
+      };
+    case updateProfile.concat("_", Fulfilled):
+      return {
+        ...prevState,
+        isError: true,
+        isLoading: false,
+        profile: { ...prevState.profile, ...payload.data.data },
+      };
+
+    case resetProfile:
+      return initialState;
+
     default:
       return prevState;
   }

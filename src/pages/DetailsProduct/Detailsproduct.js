@@ -4,25 +4,25 @@ import NavBar from "../../components/NavBar/NavBar";
 import styles from "./DetailsProduct.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import arrow from "../../assets/img/arrow.png";
-import { getData } from "../../utils/fetcher";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { useDispatch, useSelector } from "react-redux";
+import productActions from "../../redux/actions/products";
+import transactionActions from "../../redux/actions/transaction";
 const DetailsProduct = () => {
-  const [product, setProduct] = useState({});
-  const [count, setCount] = useState(0);
+  const detail = useSelector((state) => state.products.detail);
+  const isLoading = useSelector((state) => state.products.isLoading);
+  const cart = useSelector((state) => state.transaction.cart);
+  const [count, setCount] = useState(1);
   const [size, setSize] = useState("Regular");
   const { id } = useParams();
-  const role = JSON.parse(localStorage.getItem("userInfo")).role || "";
-  const fetchData = async () => {
-    try {
-      const res = await getData(`/products/${id}`);
-      setProduct({ product, ...res.data.data });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const role = useSelector((state) => state.auths.userData.role);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    fetchData();
-  }, []);
+    dispatch(productActions.getDetailProductThunk(id));
+  }, [id, dispatch]);
   const currency = (price) => {
     return (
       "IDR " +
@@ -45,6 +45,20 @@ const DetailsProduct = () => {
       return prevState - 1;
     });
   };
+
+  const checkoutHandler = () => {
+    const sizeId = size === "Regular" ? 1 : size === "Large" ? 2 : 3;
+    const body = {
+      ...cart,
+      product_id: id,
+      subtotal: parseInt(detail.price * count),
+      sizeId,
+      image: detail.image,
+      qty: count,
+    };
+    dispatch(transactionActions.cart(body));
+    toast.success("Added to cart");
+  };
   return (
     <Fragment>
       <NavBar />
@@ -52,19 +66,25 @@ const DetailsProduct = () => {
         <div className="container">
           <section className={`col-12 ${styles["categories"]}`}>
             <p className={styles["category-name"]}>
-              {product.category_name}{" "}
+              {detail && detail.category_name}{" "}
               <span className={styles["span-brown"]}>
-                &gt; {product.product_name}
+                &gt; {detail && detail.product_name}
               </span>
             </p>
           </section>
           <section className={`col-12 ${styles["details-container"]}`}>
             <aside className={styles["side-container"]}>
-              <img
-                src={`${product.image}`}
-                alt=""
-                className={styles["product-image"]}
-              />
+              {isLoading ? (
+                <div className={styles["image-loading"]}></div>
+              ) : (
+                detail && (
+                  <img
+                    src={`${detail.image}`}
+                    alt=""
+                    className={styles["product-image"]}
+                  />
+                )
+              )}
 
               <section className={styles["delivery-container"]}>
                 <p className={styles["delivery-title"]}>Delivery and Time</p>
@@ -92,10 +112,13 @@ const DetailsProduct = () => {
             </aside>
             <aside className={styles["side-container"]}>
               <h1 className={`text-center ${styles["product-main-title"]}`}>
-                {product.product_name}
+                {detail && detail.product_name}
               </h1>
+
               <div className={styles["desc-container"]}>
-                <p className={styles["description"]}>{product.description}</p>
+                <p className={styles["description"]}>
+                  {detail && detail.description}
+                </p>
                 <p className={`${styles["delivery-desc"]}`}>
                   Delivery only on{" "}
                   <span className={styles["span-brown"]}>
@@ -103,6 +126,7 @@ const DetailsProduct = () => {
                   </span>
                 </p>
               </div>
+
               <div className={`${styles["qty-price"]} col-12`}>
                 <div className={styles["qty-value"]}>
                   <span
@@ -127,12 +151,17 @@ const DetailsProduct = () => {
                     &#62;
                   </span>
                 </div>
-                <p className={styles["price"]}>
-                  {currency(product.price * count)}
-                </p>
+                {detail && (
+                  <p className={styles["price"]}>
+                    {currency(detail.price * count)}
+                  </p>
+                )}
               </div>
               <div className={styles["buttons"]}>
-                <button className={`${styles["btn"]} ${styles["add-to-cart"]}`}>
+                <button
+                  className={`${styles["btn"]} ${styles["add-to-cart"]}`}
+                  onClick={checkoutHandler}
+                >
                   Add to cart
                 </button>
                 {role !== "Admin" ? (
@@ -191,13 +220,13 @@ const DetailsProduct = () => {
             <div className={`col-12 col-md-8 ${styles["check-out"]}`}>
               <div className={styles["checkout-left"]}>
                 <img
-                  src={`${product.image}`}
+                  src={detail && `${detail.image}`}
                   alt=""
                   className={`${styles["selected-item"]}`}
                 />
                 <div className={`${styles["selected-item-detail"]}`}>
                   <p className={`${styles["item-name"]} `}>
-                    {product.product_name}
+                    {detail && detail.product_name}
                   </p>
                   <p className={`${styles["qty"]} `}>
                     ({count}) {size}

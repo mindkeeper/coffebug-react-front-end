@@ -13,18 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProfileActions } from "../../redux/actions/profile";
 
 const NavBar = ({ navigate }) => {
-  const token = JSON.parse(localStorage.getItem("userInfo"))
-    ? JSON.parse(localStorage.getItem("userInfo")).token
-    : "";
-  const role = JSON.parse(localStorage.getItem("userInfo"))
-    ? JSON.parse(localStorage.getItem("userInfo")).role
-    : "";
-  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auths.userData.token);
+  const role = useSelector((state) => state.auths.userData.role);
   const [state, setState] = useState("");
   const text = state.text;
   const title = state.title;
-  // const [profile, setProfile] = useState({});
-  const profile = useSelector((state) => state.profileProps.profile);
+  const profile = useSelector((state) => state.users.profile);
   const [search, setSearch] = useState(() => "");
   const [open, setOpen] = useState(false);
   const slide = () => {
@@ -41,32 +35,16 @@ const NavBar = ({ navigate }) => {
   };
 
   const setValue = (event) => {
-    console.log(event);
     setSearch(event.target.value);
   };
+
   const getSearch = (e) => {
     e.preventDefault();
     navigate(`/products?search=${search}`);
   };
 
-  // const getDataProfile = async () => {
-  //   try {
-  //     const result = await getProfile();
-  //     // console.log(result.data.result[0]);
-  //     setProfile(result.data.data[0]);
-  //     console.log(result);
-  //   } catch (error) {
-  //     // console.log(error);
-  //     // console.log(error.response.data.statusCode);
-  //     if (error.response.data.statusCode === 403) {
-  //       navigate("/login");
-  //     }
-  //   }
-  // };
   const showModalHandler = () => setOpen(!open);
-  useEffect(() => {
-    dispatch(getProfileActions());
-  }, []);
+
   return (
     <nav className={styles.navbar}>
       <div className={styles["left-bar"]}>

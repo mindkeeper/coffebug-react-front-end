@@ -1,42 +1,77 @@
-import { ActionType } from "redux-promise-middleware";
 import { ACTION_STRING } from "../actions/actionStrings";
 
 const initialState = {
-  product: [],
-  meta: { totalPage: null },
+  products: [],
+  pagination: {},
   isError: false,
   isLoading: false,
   error: null,
+  detail: {
+    id: null,
+    product_name: "",
+    price: null,
+    image: "",
+    category_name: "",
+    description: "",
+    sold: "",
+  },
 };
 
-export const productsReducer = (prevState = initialState, action) => {
-  const { getProducts } = ACTION_STRING;
-  const { Pending, Rejected, Fulfilled } = ActionType;
-  switch (action.type) {
-    case getProducts.concat("_", Pending):
+const productsReducer = (prevState = initialState, { type, payload }) => {
+  const { getProducts, getDetailProduct, pending, rejected, fulfilled } =
+    ACTION_STRING;
+
+  switch (type) {
+    case getProducts.concat(pending):
       return {
         ...prevState,
-        isError: false,
         isLoading: true,
-      };
-    case getProducts.concat("_", Rejected):
-      const getError = action.payload.response.data.msg;
-      return {
-        ...prevState,
-        isError: true,
-        isLoading: false,
-        error: getError,
-      };
-    case getProducts.concat("_", Fulfilled):
-      const response = action.payload.data;
-      return {
-        ...prevState,
         isError: false,
+      };
+    case getProducts.concat(rejected):
+      return {
+        ...prevState,
         isLoading: false,
-        product: response.data,
-        meta: { totalPage: response.meta.totalPage },
+        isError: true,
+        error: payload.error.response.data.msg,
+      };
+    case getProducts.concat(fulfilled):
+      return {
+        ...prevState,
+        isLoading: false,
+        products: payload.data.data,
+        pagination: payload.data.meta,
+      };
+    case getDetailProduct.concat(pending):
+      return {
+        ...prevState,
+        isLoading: true,
+        isError: false,
+      };
+    case getDetailProduct.concat(rejected):
+      return {
+        ...prevState,
+        isLoading: false,
+        isError: true,
+        error: payload.error.response.data.msg,
+      };
+    case getDetailProduct.concat(fulfilled):
+      return {
+        ...prevState,
+        isLoading: false,
+        detail: {
+          id: payload.data.data.id,
+          product_name: payload.data.data.product_name,
+          price: payload.data.data.price,
+          image: payload.data.data.image,
+          category_name: payload.data.data.category_name,
+          description: payload.data.data.description,
+          sold: payload.data.data.sold,
+        },
       };
     default:
       return prevState;
   }
 };
+
+export default productsReducer;

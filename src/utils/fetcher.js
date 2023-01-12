@@ -50,12 +50,10 @@ export const login = (data) => {
   return axiosRequest("POST", "/auths/login", data);
 };
 export const signUp = (data) => {
-  return axiosRequest("POST", "/users/register", data);
+  return axiosRequest("POST", "/auths/register", data);
 };
 
-export const getProfile = () => {
-  const token = JSON.parse(localStorage.getItem("userInfo")).token;
-
+export const getProfile = (token) => {
   return axios({
     method: "GET",
     url: `${baseUrl}/users`,
@@ -70,3 +68,9 @@ export const getHistory = (token) => {
     headers: { "x-access-token": token },
   });
 };
+
+export const getProducts = (query) =>
+  axios.get(baseUrl.concat("/products"), { params: query });
+
+export const getProductDetail = (id) =>
+  axios.get(baseUrl.concat(`/products/${id}`));

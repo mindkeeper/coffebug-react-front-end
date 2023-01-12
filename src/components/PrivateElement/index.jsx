@@ -1,8 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 const PrivateElement = ({ allowedRoles = [], children }) => {
-  const userInfo = JSON.parse(localStorage.getItem("userInfo")) || "{}";
+  const userInfo = useSelector((state) => state.auths.userData);
   if (!userInfo.token)
     return (
       <Navigate

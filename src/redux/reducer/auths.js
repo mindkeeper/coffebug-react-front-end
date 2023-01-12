@@ -1,68 +1,61 @@
 import { ACTION_STRING } from "../actions/actionStrings";
-import { ActionType } from "redux-promise-middleware";
 const initialState = {
   userData: {
     id: null,
-    token: null,
-    role: null,
-    image: null,
+    token: "",
+    role: "",
+    image: "",
   },
   isError: false,
   isLoading: false,
   isFulfilled: false,
   error: null,
 };
-const authsReducer = (prevState = initialState, action) => {
-  const { authLogin, authLogout } = ACTION_STRING;
-  const { Pending, Rejected, Fulfilled } = ActionType;
+const authsReducer = (prevState = initialState, { type, payload }) => {
+  const { authLogin, authLogout, pending, rejected, fulfilled } = ACTION_STRING;
 
-  switch (action.type) {
-    case authLogin.concat("_", Pending):
+  switch (type) {
+    case authLogin.concat("_", pending):
       return {
         ...prevState,
         isLoading: true,
         isError: false,
       };
-    case authLogin.concat("_", Rejected):
-      const errorRes = action.payload.response.data.msg;
+    case authLogin.concat(rejected):
       return {
         ...prevState,
         isLoading: false,
         isError: true,
-        error: errorRes,
+        error: payload.error.response.data.msg,
         isFulfilled: false,
       };
-    case authLogin.concat("_", Fulfilled):
-      const response = action.payload;
+    case authLogin.concat(fulfilled):
       return {
         ...prevState,
         isLoading: false,
-        isFulfilled: true,
+        sfulfilled: true,
         userData: {
-          id: response.data.data.payload.id,
-          image: response.data.data.payload.image,
-          role: response.data.data.payload.role,
-          token: response.data.data.token,
+          id: payload.data.data.payload.id,
+          image: payload.data.data.payload.image,
+          role: payload.data.data.payload.role,
+          token: payload.data.data.token,
         },
       };
-    case authLogout.concat("_", Pending):
+    case authLogout.concat(pending):
       return {
         ...prevState,
         isLoading: true,
         isError: false,
       };
-    case authLogout.concat("_", Rejected):
-      const errorLogout = action.payload.response.data.msg;
+    case authLogout.concat(rejected):
       return {
         ...prevState,
         isLoading: false,
         isError: true,
-        error: errorLogout,
+        error: payload.response.data.msg,
       };
-    case authLogout.concat("_", Fulfilled):
-      return {
-        initialState,
-      };
+    case authLogout.concat(fulfilled):
+      return initialState;
     default:
       return prevState;
   }

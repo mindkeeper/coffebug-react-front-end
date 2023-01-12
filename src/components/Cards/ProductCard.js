@@ -3,11 +3,17 @@ import React, { Fragment } from "react";
 import styles from "./styles/ProductCard.module.css";
 import iconEdit from "../../assets/img/profile/edit-icon.png";
 import { useNavigate } from "react-router-dom";
-const ProductCard = ({ id, productName, price, image, display }) => {
+import { useSelector } from "react-redux";
+const ProductCard = ({ id, productName, price, image, display, isLoading }) => {
   const navigate = useNavigate();
-  const role = JSON.parse(localStorage.getItem("userInfo")).role || "";
-  console.log(role);
-  return (
+  const role = useSelector((state) => state.auths.userData.role);
+  return isLoading ? (
+    <Fragment>
+      <div className={styles["product-card-loading"]}>
+        <div className={styles["img-loading"]}></div>
+      </div>
+    </Fragment>
+  ) : (
     <Fragment>
       <div className={styles["product-card"]}>
         <img
