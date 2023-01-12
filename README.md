@@ -14,12 +14,12 @@ Coffebug is a web application that sells foods, coffee, and beverage. with this 
 
 ## Contents
 
-- [Features](#features)
-- [Run Application](#how-to-run-the-application)
-- [Deployment](#deployment)
-- [Screenshots](#screenshots)
-- [Related Projects](#related-projects)
-- [Authors](#authors)
+- [Features](## features)
+- [Run Application](## how-to-run-the-application)
+- [Deployment](## deployment)
+- [Screenshots](## screenshots)
+- [Related Projects](## related-projects)
+- [Authors](## authors)
 
 ## Features
 
@@ -106,6 +106,7 @@ You may also see any lint errors in the console.
     <img width="250" src="public/images/profile.png">
     
 </div>
+
 ## Related Projects
 
 - [Coffebug Backend](https://https://github.com/mindkeeper/coffebug)
